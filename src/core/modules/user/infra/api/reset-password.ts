@@ -1,4 +1,5 @@
-import { gqlr } from "../../shared/infra/gqlr"
+export * from "./verify-email";
+
 
 const RESET_PASSWORD_MUTATION = `
   mutation ResetPassword($input: ResetPasswordInput!) {

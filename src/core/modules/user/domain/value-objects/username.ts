@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AppError, ErrorCode } from "../../shared";
+import { AppError, ErrorCode } from "../../../shared";
 
 export type Username = string;
 

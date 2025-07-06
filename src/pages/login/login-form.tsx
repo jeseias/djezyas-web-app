@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Link } from "@tanstack/react-router"
 import z from "zod"
 import { passwordSchema } from "@/core/modules/shared/value-objects/password"
 import { useForm } from "react-hook-form"
@@ -14,6 +15,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { MrPasswordInput } from "@/components/mr-password-input"
+import { useLogin } from "@/core/modules/user/infra/hooks"
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -23,6 +25,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 export const LoginForm = () => {
+  const { mutate: login, isPending } = useLogin()
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,8 +34,16 @@ export const LoginForm = () => {
     },
   })
 
-  function onSubmit(values:FormValues) {
-    console.log(values)
+  // Debug form state
+  console.log('Form errors:', form.formState.errors)
+  console.log('Form is valid:', form.formState.isValid)
+
+  function onSubmit(values: FormValues) {
+    console.log('Form submitted with values:', values)
+    login({
+      email: values.email,
+      password: values.password,
+    })
   }
 
   return (
@@ -53,7 +64,7 @@ export const LoginForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input placeholder="Enter your email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -75,8 +86,13 @@ export const LoginForm = () => {
             )}
           />
           </div>
-          <Button type="submit" className="w-full">
-            Login
+          <Button 
+            type="submit" 
+            className="w-full cursor-pointer" 
+            disabled={isPending}
+            onClick={() => console.log('Button clicked')}
+          >
+            {isPending ? "Logging in..." : "Login"}
           </Button>
           {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
             <span className="bg-background text-muted-foreground relative z-10 px-2">
@@ -95,9 +111,9 @@ export const LoginForm = () => {
         </div>
         <div className="text-center text-sm">
           Don&apos;t have an account?{" "}
-          <a href="/signup" className="underline underline-offset-4">
+          <Link to="/signup" className="underline underline-offset-4">
             Sign up
-          </a>
+          </Link>
         </div>
       </form>
     </Form>

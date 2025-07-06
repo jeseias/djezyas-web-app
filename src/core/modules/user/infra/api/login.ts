@@ -1,4 +1,4 @@
-import { gqlr } from "../../shared/infra/gqlr"
+import { gqlr } from "@/core/modules/shared"
 
 const LOGIN_MUTATION = `
   mutation Login($input: LoginInput!) {
@@ -111,5 +111,11 @@ export namespace Login {
 }
 
 export const login = async (params: Login.Params): Promise<Login.Response> => {
-  return gqlr<Login.Response>(LOGIN_MUTATION, { input: params })
+  const response = await gqlr<Login.Response>(LOGIN_MUTATION, { input: params });
+  if ((response as any).errors && (response as any).errors.length > 0) {
+    const error = (response as any).errors[0];
+    error.variables = params;
+    throw error;
+  }
+  return response;
 }

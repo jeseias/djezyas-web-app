@@ -1,4 +1,4 @@
-import { gqlr } from "../../shared/infra/gqlr"
+import { gqlr } from "@/core/modules/shared"
 
 const FORGOT_PASSWORD_MUTATION = `#graphql
   mutation ForgotPassword($input: ForgotPasswordInput!) {

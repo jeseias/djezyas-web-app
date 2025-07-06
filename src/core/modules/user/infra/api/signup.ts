@@ -1,4 +1,7 @@
-import { gqlr } from "../../shared/infra/gqlr"
+import { gqlr } from "@/core/modules/shared";
+
+export * from "./verify-email";
+
 
 const REGISTER_USER_MUTATION = `#graphql
   mutation RegisterUser($input: RegisterUserInput!) {

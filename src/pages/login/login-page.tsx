@@ -1,7 +1,12 @@
 import { GalleryVerticalEnd } from "lucide-react"
 import { LoginForm } from "./login-form"
+import { useSearch } from "@tanstack/react-router"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { CheckCircle } from "lucide-react"
 
 export const LoginPage = () => {
+  const { message } = useSearch({ from: '/login' })
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -15,6 +20,12 @@ export const LoginPage = () => {
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
+            {message && (
+              <Alert className="mb-4 border-green-200 bg-green-50 text-green-800">
+                <CheckCircle className="h-4 w-4" />
+                <AlertDescription>{message}</AlertDescription>
+              </Alert>
+            )}
             <LoginForm />
           </div>
         </div>

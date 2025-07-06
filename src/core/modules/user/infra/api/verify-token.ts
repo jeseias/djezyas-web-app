@@ -1,4 +1,5 @@
-import { gqlr } from "../../shared/infra/gqlr"
+export * from "./verify-email";
+
 
 const VERIFY_TOKEN_MUTATION = `#graphql
   mutation VerifyToken($input: VerifyTokenInput!) {

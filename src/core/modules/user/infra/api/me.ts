@@ -1,4 +1,5 @@
-import { gqlr } from "../../shared/infra/gqlr"
+export * from "./verify-email";
+
 import type { User } from "../entities/user"
 
 const ME_QUERY = `#graphql

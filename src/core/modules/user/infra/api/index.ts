@@ -2,7 +2,7 @@ export * from "./login";
 export * from "./signup";
 export * from "./logout";
 export * from "./me";
-export * from "./verify-email";
+export * from './verify-email'
 export * from "./verify-token";
 export * from "./forgot-password";
 export * from "./reset-password";

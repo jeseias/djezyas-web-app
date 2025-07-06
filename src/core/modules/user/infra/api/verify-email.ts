@@ -1,4 +1,4 @@
-import { gqlr } from "../../shared/infra/gqlr"
+import { gqlr } from "@/core/modules/shared";
 
 const VERIFY_EMAIL_MUTATION = `#graphql
   mutation VerifyEmail($input: VerifyEmailInput!) {
@@ -54,5 +54,11 @@ export namespace VerifyEmail {
 }
 
 export const verifyEmail = async (params: VerifyEmail.Params): Promise<VerifyEmail.Response> => {
-  return gqlr<VerifyEmail.Response>(VERIFY_EMAIL_MUTATION, { input: params })
+  const response = await gqlr<VerifyEmail.Response>(VERIFY_EMAIL_MUTATION, { input: params })
+  if ((response as any).errors && (response as any).errors.length > 0) {
+    const error = (response as any).errors[0];
+    error.variables = params;
+    throw error;
+  }
+  return response;
 } 

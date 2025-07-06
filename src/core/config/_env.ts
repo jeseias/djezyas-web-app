@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 export const envSchema = z.object({
-	API_URL: z.string().url()
+	VITE_API_URL: z.string().url()
 });
 
-const _envSchema = envSchema.safeParse(process.env);
+const _envSchema = envSchema.safeParse(import.meta.env);
 
 if (_envSchema.success === false) {
 	console.error("Invalid environment variables", _envSchema.error.format());

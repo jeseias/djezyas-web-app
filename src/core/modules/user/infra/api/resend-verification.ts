@@ -1,4 +1,5 @@
-import { gqlr } from "../../shared/infra/gqlr"
+export * from "./verify-email";
+
 
 const RESEND_VERIFICATION_MUTATION = `
   mutation ResendVerification($input: ResendVerificationInput!) {
