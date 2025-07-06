@@ -1,5 +1,4 @@
-export * from "./verify-email";
-
+import { gqlr } from "@/core/modules/shared";
 
 const RESEND_VERIFICATION_MUTATION = `
   mutation ResendVerification($input: ResendVerificationInput!) {

@@ -47,7 +47,6 @@ const LOGIN_MUTATION = `
 export namespace Login {
   export type DeviceInfoInput = {
     userAgent: string
-    ipAddress: string
     deviceType?: 'mobile' | 'desktop' | 'tablet'
     browser?: string
     os?: string

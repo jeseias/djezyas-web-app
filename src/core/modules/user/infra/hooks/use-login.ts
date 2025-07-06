@@ -36,7 +36,6 @@ export const useLogin = () => {
     mutationFn: (params: Omit<Login.Params, 'deviceInfo'>) => {
       const deviceInfo = {
         userAgent: navigator.userAgent,
-        ipAddress: '', // This would typically be obtained from the server
         deviceType: getDeviceType() as 'mobile' | 'desktop' | 'tablet',
         browser: getBrowserInfo(),
         os: getOSInfo(),

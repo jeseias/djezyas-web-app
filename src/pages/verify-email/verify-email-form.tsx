@@ -71,7 +71,7 @@ export const VerifyEmailForm = () => {
                     <Input 
                       placeholder="Enter 6-digit code" 
                       {...field} 
-                      maxLength={6}
+                      maxLength={10}
                     />
                   </FormControl>
                   <FormMessage />
