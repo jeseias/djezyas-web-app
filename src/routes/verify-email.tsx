@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { VerifyEmailPage } from '@/pages/verify-email/verify-email-page'
+import { PublicRoute } from '@/components/auth/public-route'
 
 export const Route = createFileRoute('/verify-email')({
   validateSearch: (search: Record<string, unknown>) => {
@@ -7,5 +8,13 @@ export const Route = createFileRoute('/verify-email')({
       email: search.email as string,
     }
   },
-  component: VerifyEmailPage,
-}) 
+  component: RouteComponent,
+})
+
+function RouteComponent() {
+  return (
+    <PublicRoute>
+      <VerifyEmailPage />
+    </PublicRoute>
+  )
+} 

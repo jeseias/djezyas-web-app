@@ -1,9 +1,7 @@
-export * from "./verify-email";
+import { gqlr } from '@/core/modules/shared/infra/gqlr'
 
-import type { User } from "../entities/user"
-
-const ME_QUERY = `#graphql
-  query {
+const ME_QUERY = `
+  query Me {
     me {
       id
       name
@@ -24,11 +22,29 @@ const ME_QUERY = `#graphql
 export namespace Me {
   export type Response = {
     data: {
-      me: User.Model
+        me: {
+        id: string
+        name: string
+        email: string
+        username: string
+        phone: string
+        bio?: string
+        avatar?: string
+        status: 'active' | 'inactive' | 'pending' | 'blocked'
+        role: 'admin' | 'user'
+        emailVerifiedAt?: string
+        createdAt: string
+        updatedAt: string
+      } | null
     }
   }
 }
 
 export const me = async (): Promise<Me.Response> => {
-  return gqlr<Me.Response>(ME_QUERY)
+  const response = await gqlr<Me.Response>(ME_QUERY)
+  if ((response as any).errors && (response as any).errors.length > 0) {
+    const error = (response as any).errors[0]
+    throw error
+  }
+  return response
 } 

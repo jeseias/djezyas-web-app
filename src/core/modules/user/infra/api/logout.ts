@@ -1,19 +1,14 @@
-export * from "./verify-email";
-
+import { gqlr } from "@/core/modules/shared";
 
 const LOGOUT_MUTATION = `#graphql
-  mutation Logout($input: LogoutInput!) {
-    logout(input: $input) {
+  mutation Logout {
+    logout {
       message
     }
   }
 `
 
 export namespace Logout {
-  export type Params = {
-    sessionId: string
-  }
-
   export type Response = {
     data: {
       logout: {
@@ -23,6 +18,6 @@ export namespace Logout {
   }
 }
 
-export const logout = async (params: Logout.Params): Promise<Logout.Response> => {
-  return gqlr<Logout.Response>(LOGOUT_MUTATION, { input: params })
+export const logout = async (): Promise<Logout.Response> => {
+  return gqlr<Logout.Response>(LOGOUT_MUTATION)
 } 

@@ -1,5 +1,6 @@
 import { LoginPage } from '@/pages/login/login-page'
 import { createFileRoute } from '@tanstack/react-router'
+import { PublicRoute } from '@/components/auth/public-route'
 
 export const Route = createFileRoute('/login')({
   validateSearch: (search: Record<string, unknown>) => {
@@ -11,5 +12,9 @@ export const Route = createFileRoute('/login')({
 })
 
 function RouteComponent() {
-  return <LoginPage />
+  return (
+    <PublicRoute>
+      <LoginPage />
+    </PublicRoute>
+  )
 }

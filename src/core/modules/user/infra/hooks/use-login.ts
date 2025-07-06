@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { login, type Login } from '@/core/modules/user/infra/api'
 import { ErrorCode } from '@/core/modules/shared/errors'
+import { useAuth } from '../context/auth-context'
 
 const getBrowserInfo = () => {
   const userAgent = navigator.userAgent
@@ -31,6 +32,7 @@ const getDeviceType = (): 'mobile' | 'desktop' | 'tablet' => {
 
 export const useLogin = () => {
   const navigate = useNavigate()
+  const { signIn } = useAuth()
 
   return useMutation({
     mutationFn: (params: Omit<Login.Params, 'deviceInfo'>) => {
@@ -41,15 +43,16 @@ export const useLogin = () => {
         os: getOSInfo(),
       }
 
-      console.log({ deviceInfo, params})
-      
       return login({
         ...params,
         deviceInfo,
       })
     },
     onSuccess: (data) => {
+      const { user, session, tokens } = data.data.login
       console.log('Login successful:', data.data.login)
+      
+      signIn(user, session, tokens)
       
       navigate({ to: '/app' })
     },

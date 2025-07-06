@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { me, type Me } from '@/core/modules/user/infra/api'
+import { me } from '@/core/modules/user/infra/api'
 
 export const useMe = () => {
   return useQuery({

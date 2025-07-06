@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { Toaster } from 'sonner'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { AuthProvider } from './core/modules/user/infra/context/auth-context'
 
 import { routeTree } from './routeTree.gen.ts'
 
@@ -32,8 +33,10 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <Toaster richColors position="top-right" /> 
-        <RouterProvider router={router} />
+        <AuthProvider>
+          <Toaster richColors position="top-right" /> 
+          <RouterProvider router={router} />
+        </AuthProvider>
       </QueryClientProvider>
     </StrictMode>,
   )
