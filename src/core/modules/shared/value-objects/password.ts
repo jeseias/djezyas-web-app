@@ -1,5 +1,6 @@
 import z from "zod";
 
+export type Password = string;
 export const passwordSchema = z
 	.string()
 	.min(7, "Password must be at least 7 characters")

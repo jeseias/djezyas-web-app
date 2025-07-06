@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import z from "zod"
-import { passwordSchema } from "@/core/domain/utils/password"
+import { passwordSchema } from "@/core/modules/shared/value-objects/password"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
