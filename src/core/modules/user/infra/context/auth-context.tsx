@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     return JSON.parse(userData) as User.Model
   })
   
-
   const [tokens, setTokens] = useState<Login.Tokens | null>(() => {
     const accessToken = Cookies.get(Constants.ACCESS_TOKEN_KEY)
     const refreshToken = Cookies.get(Constants.REFRESH_TOKEN_KEY)
@@ -55,6 +54,30 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       setIsAuthenticated(false)
     }
   }, [user, tokens])
+
+  useEffect(() => {
+    const handleForceLogout = () => {
+      console.log('Force logout event received, signing out user')
+      // Clear cookies and state directly to avoid dependency issues
+      Cookies.remove(Constants.USER_DATA_KEY)
+      Cookies.remove(Constants.ACCESS_TOKEN_KEY)
+      Cookies.remove(Constants.REFRESH_TOKEN_KEY)
+      Cookies.remove(Constants.ACCESS_TOKEN_EXPIRES_IN_KEY)
+      Cookies.remove(Constants.REFRESH_TOKEN_EXPIRES_IN_KEY)
+
+      setUser(null)
+      setTokens(null)
+      setIsAuthenticated(false)
+    }
+
+    console.log('Setting up force-logout event listener')
+    window.addEventListener('force-logout', handleForceLogout)
+
+    return () => {
+      console.log('Cleaning up force-logout event listener')
+      window.removeEventListener('force-logout', handleForceLogout)
+    }
+  }, [])
 
   const signIn = async (params: SignInProps) => {
     setIsLoading(true)

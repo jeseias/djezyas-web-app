@@ -40,17 +40,24 @@ api.interceptors.response.use(
     if (
       response.data &&
       Array.isArray(response.data.errors) &&
-      response.data.errors.some((err: { message?: string }) => err.message === 'Unauthorized')
+      response.data.errors.some((err: { message?: string }) => err.message === 'Unauthorized' || err.message === 'Authentication required')
     ) {
+      console.log('Unauthorized error detected in response data, dispatching force-logout event')
       window.dispatchEvent(new Event('force-logout'))
     }
+    
     return response
   },
   (error) => {
-    // Handle 401 errors globally
+    if (import.meta.env.DEV) {
+      console.log('Response error interceptor:', error.config?.url, error.response?.status, error.response?.data)
+    }
+    
     if (error.response?.status === 401) {
+      console.log('401 error detected, dispatching force-logout event')
       window.dispatchEvent(new Event('force-logout'))
     }
+    
     return Promise.reject(error)
   }
 )

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { VerifyEmailPage } from '@/pages/verify-email/verify-email-page'
 import { PublicRoute } from '@/components/auth/public-route'
+import { VerifyEmailPage } from '@/pages/auth'
 
 export const Route = createFileRoute('/verify-email')({
   validateSearch: (search: Record<string, unknown>) => {
