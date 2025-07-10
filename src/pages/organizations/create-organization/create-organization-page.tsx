@@ -21,6 +21,7 @@ import {
 // } from "@/components/ui/dropdown-menu"
 // import { ChevronDown } from "lucide-react"
 import { useApiCreateOrganization } from "@/core/modules/organization/infra/hooks"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   name: z.string().min(2, "Organization name must be at least 2 characters"),
@@ -46,6 +47,7 @@ export const CreateOrganizationPage = () => {
       meta: {},
     }, {
       onSuccess: () => {
+        toast.success("Organization created successfully")
         navigate({ to: "/app" })
       },
       onError: (error) => {
