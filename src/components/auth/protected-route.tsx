@@ -6,7 +6,7 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated, isLoading,  } = useAuth()
+  const { isAuthenticated, isLoading, logoutMessage  } = useAuth()
   const navigate = useNavigate()
 
   if (isLoading) {
@@ -18,7 +18,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   if (!isAuthenticated) {
-    navigate({ to: '/login', search: {  message: 'You must be logged in to access this page' } })
+    navigate({ to: '/login', search: {  message: logoutMessage || 'Please login to continue' } })
     return null
   }
 

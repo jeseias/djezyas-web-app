@@ -11,7 +11,8 @@ type AuthContextType = {
   isAuthenticated: boolean
   isLoading: boolean
   signIn: (params: SignInProps) => Promise<void>
-  signOut: () => Promise<void>
+  signOut: (message?: string) => Promise<void>
+  logoutMessage: string | null
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -25,6 +26,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     return JSON.parse(userData) as User.Model
   })
+  const [logoutMessage, setLogoutMessage] = useState<string | null>(null)
   
   const [tokens, setTokens] = useState<Login.Tokens | null>(() => {
     const accessToken = Cookies.get(Constants.ACCESS_TOKEN_KEY)
@@ -101,7 +103,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }
   }
 
-  const signOut = async () => {
+  const signOut = async (message?: string) => {
     Cookies.remove(Constants.USER_DATA_KEY)
     Cookies.remove(Constants.ACCESS_TOKEN_KEY)
     Cookies.remove(Constants.REFRESH_TOKEN_KEY)
@@ -109,6 +111,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     Cookies.remove(Constants.REFRESH_TOKEN_EXPIRES_IN_KEY)
 
     setIsAuthenticated(false)
+
+    setLogoutMessage(message || null)
   }
 
   return (
@@ -118,6 +122,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       isLoading,
       signIn,
       signOut,
+      logoutMessage,
     }}>
       {children}
     </AuthContext.Provider>
