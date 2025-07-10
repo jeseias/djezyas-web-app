@@ -1,4 +1,4 @@
-import type { Id, Phone, Password, Url } from "../../shared/value-objects";
+import type { Id, Password, Phone, Url } from "@/core/modules/shared";
 import type { Email, Username } from "../value-objects";
 
 export namespace User {

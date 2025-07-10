@@ -49,10 +49,7 @@ export const useLogin = () => {
       })
     },
     onSuccess: (data) => {
-      const { user, session, tokens } = data.data.login
-      console.log('Login successful:', data.data.login)
-      
-      signIn(user, session, tokens)
+      signIn(data.data.login)
       
       navigate({ to: '/app' })
     },

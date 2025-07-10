@@ -1,4 +1,5 @@
 import { gqlr } from "@/core/modules/shared"
+import type { User } from "../../domain/entities"
 
 const LOGIN_MUTATION = `
   mutation Login($input: LoginInput!) {
@@ -58,21 +59,6 @@ export namespace Login {
     deviceInfo: DeviceInfoInput
   }
 
-  export type User = {
-    id: string
-    name: string
-    email: string
-    username: string
-    phone: string
-    bio?: string
-    avatar?: string
-    status: 'active' | 'inactive' | 'pending' | 'blocked'
-    role: 'admin' | 'user'
-    emailVerifiedAt?: string
-    createdAt: string
-    updatedAt: string
-  }
-
   export type Session = {
     id: string
     userId: string
@@ -100,7 +86,7 @@ export namespace Login {
   export type Response = {
     data: {
       login: {
-        user: User
+        user: User.Model
         session: Session
         tokens: Tokens
         message: string
