@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type PropsWithChildren } from "react"
+import { useNavigate } from '@tanstack/react-router'
 import type { Organization } from "../domain/entities/organization"
 import { useApiLoadMyOrganization } from "../infra/hooks"
 import { useAuth } from "@/core/modules/user/infra/context/auth-context"
@@ -13,9 +14,14 @@ type OrganizationContextType = {
 
 const OrganizationContext = createContext<OrganizationContextType | undefined>(undefined)
 
-export const OrganizationProvider = ({ children }: PropsWithChildren) => {
+interface OrganizationProviderProps extends PropsWithChildren {
+  requireOrganization?: boolean
+}
+
+export const OrganizationProvider = ({ children }: OrganizationProviderProps) => {
   const { isAuthenticated, isLoading: authLoading } = useAuth()
   const { data, isLoading: orgLoading } = useApiLoadMyOrganization()
+  const navigate = useNavigate()
 
   const [selectedOrganization, setSelectedOrganization] = useState<Organization.Summary | null>(null)
 
@@ -30,6 +36,12 @@ export const OrganizationProvider = ({ children }: PropsWithChildren) => {
     }
   }, [hasOrganizations, selectedOrganization, allMyOrganizations])
 
+  useEffect(() => {
+    if (!isLoading && !hasOrganizations) {
+      navigate({ to: '/create-organization' })
+    }
+  }, [ isLoading, hasOrganizations, navigate])
+
   const value = useMemo(() => ({
     organization: selectedOrganization,
     setOrganization: setSelectedOrganization,
@@ -37,6 +49,18 @@ export const OrganizationProvider = ({ children }: PropsWithChildren) => {
     hasOrganizations,
     isLoading,
   }), [selectedOrganization, allMyOrganizations, hasOrganizations, isLoading])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    )
+  }
+
+  if (!hasOrganizations) {
+    return null
+  }
 
   return (
     <OrganizationContext.Provider value={value}>
