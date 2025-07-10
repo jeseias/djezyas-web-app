@@ -17,16 +17,11 @@ export const OrganizationProvider = ({ children }: PropsWithChildren) => {
   const { isAuthenticated, isLoading: authLoading } = useAuth()
   const { data, isLoading: orgLoading } = useApiLoadMyOrganization()
 
-  console.log('data', data)
-  console.log('Auth state:', { isAuthenticated, authLoading })
-  console.log('Org loading:', orgLoading)
-
   const [selectedOrganization, setSelectedOrganization] = useState<Organization.Summary | null>(null)
 
   const allMyOrganizations = data?.loadMyOrganizations.organizations || []
   const hasOrganizations = allMyOrganizations.length > 0
 
-  // Combined loading state - consider loading if auth is loading OR org is loading
   const isLoading = authLoading || (isAuthenticated && orgLoading)
 
   useEffect(() => {

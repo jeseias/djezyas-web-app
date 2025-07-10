@@ -3,8 +3,10 @@ import type { Organization } from "../../domain/entities/organization"
 
 export namespace LoadMyOrganization {
   export type Response = {
-    loadMyOrganizations: {
-      organizations: Array<Organization.Summary>
+    data: {
+      loadMyOrganizations: {
+        organizations: Array<Organization.Summary>
+      }
     }
   }
 }

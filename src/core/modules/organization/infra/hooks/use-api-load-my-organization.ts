@@ -11,7 +11,7 @@ export const useApiLoadMyOrganization = () => {
       if (import.meta.env.DEV) {
         await new Promise(resolve => setTimeout(resolve, 100))
       }
-      return loadMyOrganizations()
+      return (await loadMyOrganizations()).data
     },
     enabled: isAuthenticated && !authLoading,
     retry: (failureCount, error) => {

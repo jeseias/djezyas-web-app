@@ -1,12 +1,8 @@
 import { _env } from "@/core/config/_env"
+import { Constants } from "@/core/config/constants"
 import axios from "axios"
+import Cookies from "js-cookie"
 
-const getCookie = (name: string): string | null => {
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop()?.split(';').shift() || null
-  return null
-}
 
 export const api = axios.create({
   baseURL: _env.VITE_API_URL,
@@ -14,23 +10,12 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const tokensCookie = getCookie('tokens')
-    
-    if (tokensCookie) {
+    const accessToken = Cookies.get(Constants.ACCESS_TOKEN_KEY)
+    console.log('accessToken', {accessToken})
+    if (accessToken) {
       try {
-        const tokens = JSON.parse(tokensCookie)
-        if (tokens.accessToken) {
-          config.headers.Authorization = `Bearer ${tokens.accessToken}`
-          config.headers['x-access-token'] = tokens.accessToken
-          
-          if (import.meta.env.DEV) {
-            console.log('Token added to request:', {
-              url: config.url,
-              method: config.method,
-              hasToken: !!tokens.accessToken,
-              tokenLength: tokens.accessToken?.length
-            })
-          }
+        if (accessToken) {
+          config.headers['x-access-token'] = accessToken
         } else {
           console.warn('Access token not found in tokens cookie')
         }
