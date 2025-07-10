@@ -34,12 +34,7 @@ export const LoginForm = () => {
     },
   })
 
-  // Debug form state
-  console.log('Form errors:', form.formState.errors)
-  console.log('Form is valid:', form.formState.isValid)
-
   function onSubmit(values: FormValues) {
-    console.log('Form submitted with values:', values)
     login({
       email: values.email,
       password: values.password,

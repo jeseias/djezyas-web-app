@@ -11,7 +11,6 @@ export const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const accessToken = Cookies.get(Constants.ACCESS_TOKEN_KEY)
-    console.log('accessToken', {accessToken})
     if (accessToken) {
       try {
         if (accessToken) {
@@ -50,7 +49,6 @@ api.interceptors.response.use(
   (error) => {
     // Handle 401 errors globally
     if (error.response?.status === 401) {
-      console.log('401 Unauthorized - triggering force logout')
       window.dispatchEvent(new Event('force-logout'))
     }
     return Promise.reject(error)

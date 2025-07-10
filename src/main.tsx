@@ -9,6 +9,7 @@ import { routeTree } from './routeTree.gen.ts'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
+import { ThemeProvider } from './components/theme-provider.tsx'
 
 const queryClient = new QueryClient()
 
@@ -34,8 +35,10 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <Toaster richColors position="top-right" /> 
-          <RouterProvider router={router} />
+          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            <Toaster richColors position="top-right" /> 
+            <RouterProvider router={router} />
+          </ThemeProvider>
         </AuthProvider>
       </QueryClientProvider>
     </StrictMode>,
