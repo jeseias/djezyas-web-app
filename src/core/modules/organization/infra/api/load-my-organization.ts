@@ -19,6 +19,7 @@ const LOAD_MY_ORGANIZATIONS_QUERY = `#graphql
         name
         slug
         logoUrl
+        plan
       }
     }
   }

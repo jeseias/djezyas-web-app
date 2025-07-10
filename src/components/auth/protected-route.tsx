@@ -18,7 +18,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   if (!isAuthenticated) {
-    navigate({ to: '/login', search: { message: '' } })
+    navigate({ to: '/login', search: {  message: 'You must be logged in to access this page' } })
     return null
   }
 

@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type PropsWithChildren } from "react"
 import { useNavigate } from '@tanstack/react-router'
 import type { Organization } from "../domain/entities/organization"
-import { useApiLoadMyOrganization } from "../infra/hooks"
+import { useApiLoadMyOrganizations } from "../infra/hooks"
 import { useAuth } from "@/core/modules/user/infra/context/auth-context"
 
 type OrganizationContextType = {
@@ -20,7 +20,7 @@ interface OrganizationProviderProps extends PropsWithChildren {
 
 export const OrganizationProvider = ({ children }: OrganizationProviderProps) => {
   const { isAuthenticated, isLoading: authLoading } = useAuth()
-  const { data, isLoading: orgLoading } = useApiLoadMyOrganization()
+  const { data, isLoading: orgLoading } = useApiLoadMyOrganizations()
   const navigate = useNavigate()
 
   const [selectedOrganization, setSelectedOrganization] = useState<Organization.Summary | null>(null)

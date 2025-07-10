@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { loadMyOrganizations } from "../api/load-my-organization"
 import { useAuth } from "@/core/modules/user/infra/context/auth-context"
 
-export const useApiLoadMyOrganization = () => {
+export const useApiLoadMyOrganizations = () => {
   const { isAuthenticated, isLoading: authLoading } = useAuth()
 
   return useQuery({
@@ -24,8 +24,8 @@ export const useApiLoadMyOrganization = () => {
       
       return true 
     },
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), 
+    staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000, 
     })
 }

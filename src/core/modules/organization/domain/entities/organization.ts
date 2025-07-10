@@ -41,5 +41,6 @@ export namespace Organization {
 		name: string;
 		slug: Slug;
 		logoUrl?: Url;
+    plan?: PlanType;
   }
 }

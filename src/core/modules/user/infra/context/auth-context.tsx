@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const handleForceLogout = () => {
       console.log('Force logout event received, signing out user')
-      // Clear cookies and state directly to avoid dependency issues
+
       Cookies.remove(Constants.USER_DATA_KEY)
       Cookies.remove(Constants.ACCESS_TOKEN_KEY)
       Cookies.remove(Constants.REFRESH_TOKEN_KEY)
