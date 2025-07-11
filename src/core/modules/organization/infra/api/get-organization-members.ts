@@ -6,7 +6,7 @@ export namespace GetOrganizationMembers {
     data: {
       getOrganizationMembers: {
         members: Array<Organization.Member>
-        pendingInvitations: Array<Organization.Invitation>
+        pendingInvitations: Array<Organization.PendingInvitationWithUser>
       }
     }
   }
@@ -41,6 +41,11 @@ const GET_ORGANIZATION_MEMBERS_QUERY = `#graphql
         invitedAt
         acceptedAt
         status
+        user {
+          name
+          avatar
+          email
+        }
       }
     }
   }

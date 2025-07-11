@@ -1,15 +1,16 @@
+import { useState } from "react"
 import { useApiGetOrganizationMembers } from "@/core/modules/organization/infra/hooks"
-import { MembersTable, MembersPageHeader, PendingInvitations } from "./components"
+import { MembersTable, MembersPageHeader, PendingInvitations, InviteMemberDialog } from "./components"
 
 export function MembersPage() {
+  const [showInvitations, setShowInvitations] = useState(false)
   const { data, isLoading, error } = useApiGetOrganizationMembers()
   
   const members = data?.getOrganizationMembers.members || []
   const invitations = data?.getOrganizationMembers.pendingInvitations || []
 
-  const handleInviteMember = () => {
-    // TODO: Implement invite member functionality
-    console.log("Invite member clicked")
+  const handleToggleInvitations = () => {
+    setShowInvitations(!showInvitations)
   }
 
   const handleResendInvitation = (invitationId: string) => {
@@ -22,36 +23,46 @@ export function MembersPage() {
     console.log("Cancel invitation:", invitationId)
   }
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-sm text-muted-foreground">Loading members...</p>
+        </div>
+      </div>
+    )
+  }
+
   if (error) {
     return (
-      <div className="container mx-auto py-6">
-        <div className="rounded-md border border-red-200 bg-red-50 p-4">
-          <h3 className="text-sm font-medium text-red-800">Error loading members</h3>
-          <p className="mt-2 text-sm text-red-700">
-            {error instanceof Error ? error.message : "An unexpected error occurred"}
-          </p>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <p className="text-sm text-destructive">Failed to load members. Please try again.</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="container mx-auto py-6 space-y-6 px-6">
+    <div className="space-y-6 px-6">
       <MembersPageHeader 
         memberCount={members.length}
-        onInviteMember={handleInviteMember}
+        onToggleInvitations={handleToggleInvitations}
+        showInvitations={showInvitations}
       />
       
-      <PendingInvitations
-        invitations={invitations}
-        onResendInvitation={handleResendInvitation}
-        onCancelInvitation={handleCancelInvitation}
-      />
+      <InviteMemberDialog />
       
-      <MembersTable 
-        members={members}
-        isLoading={isLoading}
-      />
+      {showInvitations && invitations.length > 0 && (
+        <PendingInvitations 
+          invitations={invitations}
+          onResendInvitation={handleResendInvitation}
+          onCancelInvitation={handleCancelInvitation}
+        />
+      )}
+      
+      <MembersTable members={members} />
     </div>
   )
 }

@@ -1,12 +1,17 @@
 import { Button } from "@/components/ui/button"
-import { Plus, Users } from "lucide-react"
+import { Users } from "lucide-react"
 
 interface MembersPageHeaderProps {
   memberCount?: number
-  onInviteMember?: () => void
+  onToggleInvitations?: () => void
+  showInvitations?: boolean
 }
 
-export function MembersPageHeader({ memberCount = 0, onInviteMember }: MembersPageHeaderProps) {
+export function MembersPageHeader({ 
+  memberCount = 0, 
+  onToggleInvitations,
+  showInvitations = false 
+}: MembersPageHeaderProps) {
   return (
     <div className="flex items-center justify-between">
       <div className="space-y-1">
@@ -16,13 +21,13 @@ export function MembersPageHeader({ memberCount = 0, onInviteMember }: MembersPa
         </p>
       </div>
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm">
+        <Button 
+          variant="outline" 
+          size="sm"
+          onClick={onToggleInvitations}
+        >
           <Users className="mr-2 h-4 w-4" />
-          View Invitations
-        </Button>
-        <Button onClick={onInviteMember}>
-          <Plus className="mr-2 h-4 w-4" />
-          Invite Member
+          {showInvitations ? 'Hide' : 'View'} Invitations
         </Button>
       </div>
     </div>

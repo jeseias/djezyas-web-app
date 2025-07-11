@@ -78,13 +78,25 @@ export namespace Organization {
   }
 
   export type Invitation = {
-    id: Id;
-    organizationId: Id;
-    email: string;
-    role: InvitationRole;
-    token: string;
-    invitedAt: string;
-    acceptedAt?: string;
-    status: InvitationStatus;
+    id: string
+    organizationId: string
+    email: string
+    role: InvitationRole
+    token: string
+    invitedAt: string
+    acceptedAt?: string
+    status: InvitationStatus
+  }
+
+  export type PendingInvitationWithUser = {
+    id: string
+    organizationId: string
+    email: string
+    role: InvitationRole
+    token: string
+    invitedAt: string
+    acceptedAt?: string
+    status: InvitationStatus
+    user: MemberUser
   }
 }
