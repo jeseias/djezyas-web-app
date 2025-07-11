@@ -14,6 +14,23 @@ export namespace Organization {
 		ENTERPRISE = "enterprise",
 	}
 
+  export enum MemberRole {
+		OWNER = "owner",
+		ADMIN = "admin",
+		MEMBER = "member",
+	}
+
+  export enum InvitationRole {
+		ADMIN = "admin",
+		MEMBER = "member",
+	}
+
+  export enum InvitationStatus {
+		PENDING = "pending",
+		ACCEPTED = "accepted",
+		EXPIRED = "expired",
+	}
+
   export enum SettingKey {
 		THEME = "theme",
 		TIMEZONE = "timezone",
@@ -42,5 +59,32 @@ export namespace Organization {
 		slug: Slug;
 		logoUrl?: Url;
     plan?: PlanType;
+  }
+
+  export type MemberUser = {
+    name: string;
+    avatar?: string;
+    email: string;
+  }
+
+  export type Member = {
+    id: Id;
+    organizationId: Id;
+    userId: Id;
+    role: MemberRole;
+    invitedAt: string;
+    joinedAt?: string;
+    user: MemberUser;
+  }
+
+  export type Invitation = {
+    id: Id;
+    organizationId: Id;
+    email: string;
+    role: InvitationRole;
+    token: string;
+    invitedAt: string;
+    acceptedAt?: string;
+    status: InvitationStatus;
   }
 }

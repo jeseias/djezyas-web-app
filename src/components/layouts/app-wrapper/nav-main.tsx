@@ -1,3 +1,4 @@
+
 import { ChevronRight, type LucideIcon } from "lucide-react"
 
 import {
@@ -18,6 +19,7 @@ import {
 
 export function NavMain({
   items,
+  groupLabel,
 }: {
   items: {
     title: string
@@ -29,10 +31,11 @@ export function NavMain({
       url: string
     }[]
   }[]
+  groupLabel?: string
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>{groupLabel}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
