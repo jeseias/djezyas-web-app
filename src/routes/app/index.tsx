@@ -1,7 +1,4 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { ProtectedRoute } from '@/components/auth/protected-route'
-import { OrganizationProvider } from '@/core/modules/organization/context/organization-context'
-import { AppWrapperLayout } from '@/components/layouts/app-wrapper/app-wrapper-layout'
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/app/')({
   component: AppLayout,
@@ -9,12 +6,8 @@ export const Route = createFileRoute('/app/')({
 
 function AppLayout() {
   return (
-    <OrganizationProvider>
-      <ProtectedRoute>
-        <AppWrapperLayout>
-          <Outlet />
-        </AppWrapperLayout>
-      </ProtectedRoute>
-    </OrganizationProvider>
+    <div className="flex flex-col gap-4">
+      <h1 className="text-2xl font-bold">Home Dashboard</h1>
+    </div>
   )
 }

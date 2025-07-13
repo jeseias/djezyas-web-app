@@ -13,10 +13,13 @@ import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as CreateOrganizationRouteImport } from './routes/create-organization'
+import { Route as OfficeRouteRouteImport } from './routes/office/route'
+import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OfficeIndexRouteImport } from './routes/office/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppMembersRouteImport } from './routes/app/members'
+import { Route as OfficeProductsCategoriesRouteImport } from './routes/office/products/categories'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -38,36 +41,55 @@ const CreateOrganizationRoute = CreateOrganizationRouteImport.update({
   path: '/create-organization',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OfficeRouteRoute = OfficeRouteRouteImport.update({
+  id: '/office',
+  path: '/office',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OfficeIndexRoute = OfficeIndexRouteImport.update({
-  id: '/office/',
-  path: '/office/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => OfficeRouteRoute,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
-  id: '/app/',
-  path: '/app/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const AppMembersRoute = AppMembersRouteImport.update({
-  id: '/app/members',
-  path: '/app/members',
-  getParentRoute: () => rootRouteImport,
+  id: '/members',
+  path: '/members',
+  getParentRoute: () => AppRouteRoute,
 } as any)
+const OfficeProductsCategoriesRoute =
+  OfficeProductsCategoriesRouteImport.update({
+    id: '/products/categories',
+    path: '/products/categories',
+    getParentRoute: () => OfficeRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/office': typeof OfficeRouteRouteWithChildren
   '/create-organization': typeof CreateOrganizationRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
   '/app/members': typeof AppMembersRoute
-  '/app': typeof AppIndexRoute
-  '/office': typeof OfficeIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/office/': typeof OfficeIndexRoute
+  '/office/products/categories': typeof OfficeProductsCategoriesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,10 +100,13 @@ export interface FileRoutesByTo {
   '/app/members': typeof AppMembersRoute
   '/app': typeof AppIndexRoute
   '/office': typeof OfficeIndexRoute
+  '/office/products/categories': typeof OfficeProductsCategoriesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/office': typeof OfficeRouteRouteWithChildren
   '/create-organization': typeof CreateOrganizationRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
@@ -89,18 +114,22 @@ export interface FileRoutesById {
   '/app/members': typeof AppMembersRoute
   '/app/': typeof AppIndexRoute
   '/office/': typeof OfficeIndexRoute
+  '/office/products/categories': typeof OfficeProductsCategoriesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/app'
+    | '/office'
     | '/create-organization'
     | '/login'
     | '/signup'
     | '/verify-email'
     | '/app/members'
-    | '/app'
-    | '/office'
+    | '/app/'
+    | '/office/'
+    | '/office/products/categories'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,9 +140,12 @@ export interface FileRouteTypes {
     | '/app/members'
     | '/app'
     | '/office'
+    | '/office/products/categories'
   id:
     | '__root__'
     | '/'
+    | '/app'
+    | '/office'
     | '/create-organization'
     | '/login'
     | '/signup'
@@ -121,17 +153,17 @@ export interface FileRouteTypes {
     | '/app/members'
     | '/app/'
     | '/office/'
+    | '/office/products/categories'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
+  OfficeRouteRoute: typeof OfficeRouteRouteWithChildren
   CreateOrganizationRoute: typeof CreateOrganizationRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
-  AppMembersRoute: typeof AppMembersRoute
-  AppIndexRoute: typeof AppIndexRoute
-  OfficeIndexRoute: typeof OfficeIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -164,6 +196,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateOrganizationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/office': {
+      id: '/office'
+      path: '/office'
+      fullPath: '/office'
+      preLoaderRoute: typeof OfficeRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -173,37 +219,71 @@ declare module '@tanstack/react-router' {
     }
     '/office/': {
       id: '/office/'
-      path: '/office'
-      fullPath: '/office'
+      path: '/'
+      fullPath: '/office/'
       preLoaderRoute: typeof OfficeIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof OfficeRouteRoute
     }
     '/app/': {
       id: '/app/'
-      path: '/app'
-      fullPath: '/app'
+      path: '/'
+      fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/app/members': {
       id: '/app/members'
-      path: '/app/members'
+      path: '/members'
       fullPath: '/app/members'
       preLoaderRoute: typeof AppMembersRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/office/products/categories': {
+      id: '/office/products/categories'
+      path: '/products/categories'
+      fullPath: '/office/products/categories'
+      preLoaderRoute: typeof OfficeProductsCategoriesRouteImport
+      parentRoute: typeof OfficeRouteRoute
     }
   }
 }
 
+interface AppRouteRouteChildren {
+  AppMembersRoute: typeof AppMembersRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppMembersRoute: AppMembersRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
+interface OfficeRouteRouteChildren {
+  OfficeIndexRoute: typeof OfficeIndexRoute
+  OfficeProductsCategoriesRoute: typeof OfficeProductsCategoriesRoute
+}
+
+const OfficeRouteRouteChildren: OfficeRouteRouteChildren = {
+  OfficeIndexRoute: OfficeIndexRoute,
+  OfficeProductsCategoriesRoute: OfficeProductsCategoriesRoute,
+}
+
+const OfficeRouteRouteWithChildren = OfficeRouteRoute._addFileChildren(
+  OfficeRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
+  OfficeRouteRoute: OfficeRouteRouteWithChildren,
   CreateOrganizationRoute: CreateOrganizationRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
   VerifyEmailRoute: VerifyEmailRoute,
-  AppMembersRoute: AppMembersRoute,
-  AppIndexRoute: AppIndexRoute,
-  OfficeIndexRoute: OfficeIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

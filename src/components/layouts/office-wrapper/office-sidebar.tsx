@@ -23,17 +23,17 @@ import { OrganizationSwitcher } from "./organization-switcher"
 
 const data = {
   navMain: {
-    groupLabel: "Organizations",
+    groupLabel: "PRODUCTS",
     items: [
       {
-        title: "Overview",
-        url: "/app",
+        title: "Dashboard",
+        url: "/office",
         icon: SquareTerminal,
         isActive: true,
         items: [
           {
-            title: "Members",
-            url: "/app/members",
+            title: "Products Categories",
+            url: "/office/products/categories",
           },
         ],
       },
