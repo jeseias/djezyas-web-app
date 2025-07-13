@@ -16,9 +16,9 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { NavMain } from "./nav-main"
-import { NavProjects } from "./nav-projects"
-import { NavUser } from "./nav-user"
+import { OfficeNavMain } from "./office-nav-main"
+import { OfficeNavProjects } from "./office-nav-projects"
+import { OfficeNavUser } from "./office-nav-user"
 import { OrganizationSwitcher } from "./organization-switcher"
 
 const data = {
@@ -123,18 +123,18 @@ const data = {
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function OfficeSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <OrganizationSwitcher />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain.items} groupLabel={data.navMain.groupLabel} />
-        <NavProjects projects={data.projects} />
+        <OfficeNavMain items={data.navMain.items} groupLabel={data.navMain.groupLabel} />
+        <OfficeNavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser />
+        <OfficeNavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
