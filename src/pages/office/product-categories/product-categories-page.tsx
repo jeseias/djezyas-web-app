@@ -4,19 +4,24 @@ import { CreateProductCategoryDialog, ProductCategoriesPageHeader, ProductCatego
 
 export const ProductCategoriesPage = () => {
   const [showCreateDialog, setShowCreateDialog] = useState(false)
-  const [searchParams, setSearchParams] = useState({
-    page: 1,
-    limit: 10,
-    sort: "name",
-    order: "asc",
-    search: ""
-  })
+  const [searchValue, setSearchValue] = useState("")
   
-  const { data, isLoading, error, refetch } = useApiListProductCategories(searchParams)
+  const { data, isLoading, error, refetch } = useApiListProductCategories({
+    page: 1,
+    limit: 100, // Get more items for frontend filtering
+    sort: "name",
+    order: "asc"
+  })
   const createMutation = useApiCreateProductCategory()
   
-  const categories = data?.items || []
+  const allCategories = data?.items || []
   const totalItems = data?.totalItems || 0
+
+  // Frontend filtering
+  const filteredCategories = allCategories.filter(category =>
+    category.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+    (category.description && category.description.toLowerCase().includes(searchValue.toLowerCase()))
+  )
 
   const handleCreateCategory = async (params: { name: string; description?: string }) => {
     try {
@@ -29,15 +34,7 @@ export const ProductCategoriesPage = () => {
   }
 
   const handleSearch = (search: string) => {
-    setSearchParams(prev => ({ ...prev, search, page: 1 }))
-  }
-
-  const handlePageChange = (page: number) => {
-    setSearchParams(prev => ({ ...prev, page }))
-  }
-
-  const handleSort = (sort: string, order: string) => {
-    setSearchParams(prev => ({ ...prev, sort, order }))
+    setSearchValue(search)
   }
 
   if (isLoading) {
@@ -64,10 +61,10 @@ export const ProductCategoriesPage = () => {
   return (
     <div className="space-y-6 px-6">
       <ProductCategoriesPageHeader 
-        categoryCount={totalItems}
+        categoryCount={filteredCategories.length}
         onSearch={handleSearch}
         onCreateCategory={() => setShowCreateDialog(true)}
-        searchValue={searchParams.search}
+        searchValue={searchValue}
       />
       
       <CreateProductCategoryDialog 
@@ -78,14 +75,7 @@ export const ProductCategoriesPage = () => {
       />
       
       <ProductCategoriesTable 
-        categories={categories}
-        currentPage={searchParams.page}
-        totalItems={totalItems}
-        pageSize={searchParams.limit}
-        sortBy={searchParams.sort}
-        sortOrder={searchParams.order}
-        onPageChange={handlePageChange}
-        onSort={handleSort}
+        categories={filteredCategories}
       />
     </div>
   )

@@ -19,6 +19,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as OfficeIndexRouteImport } from './routes/office/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppMembersRouteImport } from './routes/app/members'
+import { Route as AppProductsIndexRouteImport } from './routes/app/products/index'
 import { Route as OfficeProductsCategoriesRouteImport } from './routes/office/products/categories'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
@@ -71,6 +72,11 @@ const AppMembersRoute = AppMembersRouteImport.update({
   path: '/members',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppProductsIndexRoute = AppProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const OfficeProductsCategoriesRoute =
   OfficeProductsCategoriesRouteImport.update({
     id: '/products/categories',
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppIndexRoute
   '/office/': typeof OfficeIndexRoute
   '/office/products/categories': typeof OfficeProductsCategoriesRoute
+  '/app/products': typeof AppProductsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/office': typeof OfficeIndexRoute
   '/office/products/categories': typeof OfficeProductsCategoriesRoute
+  '/app/products': typeof AppProductsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/app/': typeof AppIndexRoute
   '/office/': typeof OfficeIndexRoute
   '/office/products/categories': typeof OfficeProductsCategoriesRoute
+  '/app/products/': typeof AppProductsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/app/'
     | '/office/'
     | '/office/products/categories'
+    | '/app/products'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/office'
     | '/office/products/categories'
+    | '/app/products'
   id:
     | '__root__'
     | '/'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/app/'
     | '/office/'
     | '/office/products/categories'
+    | '/app/products/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -238,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMembersRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/products/': {
+      id: '/app/products/'
+      path: '/products'
+      fullPath: '/app/products'
+      preLoaderRoute: typeof AppProductsIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/office/products/categories': {
       id: '/office/products/categories'
       path: '/products/categories'
@@ -251,11 +270,13 @@ declare module '@tanstack/react-router' {
 interface AppRouteRouteChildren {
   AppMembersRoute: typeof AppMembersRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppProductsIndexRoute: typeof AppProductsIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppMembersRoute: AppMembersRoute,
   AppIndexRoute: AppIndexRoute,
+  AppProductsIndexRoute: AppProductsIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

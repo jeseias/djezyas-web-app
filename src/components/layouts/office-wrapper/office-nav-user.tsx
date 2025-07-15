@@ -1,8 +1,10 @@
 import {
   BadgeCheck,
   Bell,
+  BookDashed,
   ChevronsUpDown,
   CreditCard,
+  LayoutDashboard,
   LogOut,
   Sparkles,
 } from "lucide-react"
@@ -83,6 +85,15 @@ export function OfficeNavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
+            <a href="/app">
+              <DropdownMenuGroup className="cursor-pointer">
+                <DropdownMenuItem>
+                  <LayoutDashboard />
+                  App
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+            </a>
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
