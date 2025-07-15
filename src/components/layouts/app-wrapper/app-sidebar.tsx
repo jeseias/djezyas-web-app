@@ -18,42 +18,48 @@ import { NavUser } from "./nav-user"
 import { OrganizationSwitcher } from "./organization-switcher"
 
 const data = {
-  navMain: {
-    groupLabel: "Organizations",
-    items: [
-      {
-        title: "Overview",
-        url: "/app",
-        icon: SquareTerminal,
-        isActive: true,
-        items: [
-          {
-            title: "Members",
-            url: "/app/members",
-          },
-          {
-            title: "Products",
-            url: "/app/products",
-          },
-        ],
-      },
-    ],
-  },
-  projects: [
+  navMain: [
     {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
+      groupLabel: "Organization",
+      items: [
+        {
+          title: "Overview",
+          url: "/app",
+          icon: SquareTerminal,
+          isActive: true,
+          items: [
+            {
+              title: "Members",
+              url: "/app/members",
+            },
+            {
+              title: "Products",
+              url: "/app/products",
+            },
+          ],
+        },
+      ],
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
+      groupLabel: "Products",
+      items: [
+        {
+          title: "Products Dashboard",
+          url: "/app/products",
+          icon: SquareTerminal,
+          isActive: true,
+          items: [
+            {
+              title: "Products",
+              url: "/app/products",
+            },
+            {
+              title: "Products",
+              url: "/app/products/types",
+            },
+          ],
+        },
+      ],
     },
   ],
 }
@@ -65,7 +71,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <OrganizationSwitcher />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain.items} groupLabel={data.navMain.groupLabel} />
+        <NavMain items={data.navMain} />
         {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
