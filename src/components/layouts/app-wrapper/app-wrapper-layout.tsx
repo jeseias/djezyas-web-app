@@ -3,8 +3,11 @@ import type { PropsWithChildren } from "react"
 import { AppSidebar } from "./app-sidebar"
 import { Separator } from "@/components/ui/separator"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
+import { useAuth } from "@/core/modules/user/infra/context"
 
 export const AppWrapperLayout = ({ children }: PropsWithChildren) => {
+  const { isAdmin } = useAuth()
+  
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -30,6 +33,9 @@ export const AppWrapperLayout = ({ children }: PropsWithChildren) => {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
+          {isAdmin && (
+            <a href="/office">Office</a>
+          )}
         </header>
         <main>
           {children}

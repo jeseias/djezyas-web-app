@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react"
-import type { User } from "../../domain/entities"
+import { User } from "../../domain/entities"
 import type { Login } from "../api"
 import Cookies from "js-cookie";
 import { Constants } from "@/core/config/constants";
@@ -10,6 +10,7 @@ type AuthContextType = {
   user: User.Model | null
   isAuthenticated: boolean
   isLoading: boolean
+  isAdmin: boolean
   signIn: (params: SignInProps) => Promise<void>
   signOut: (message?: string) => Promise<void>
   logoutMessage: string | null
@@ -59,7 +60,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     const handleForceLogout = () => {
-      console.log('Force logout event received, signing out user')
 
       Cookies.remove(Constants.USER_DATA_KEY)
       Cookies.remove(Constants.ACCESS_TOKEN_KEY)
@@ -72,7 +72,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       setIsAuthenticated(false)
     }
 
-    console.log('Setting up force-logout event listener')
     window.addEventListener('force-logout', handleForceLogout)
 
     return () => {
@@ -123,6 +122,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       signIn,
       signOut,
       logoutMessage,
+      isAdmin: user?.role === User.UserRole.ADMIN,
     }}>
       {children}
     </AuthContext.Provider>
