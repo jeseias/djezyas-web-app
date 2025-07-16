@@ -1,8 +1,5 @@
 import * as React from "react"
 import {
-  Frame,
-  Map,
-  PieChart,
   SquareTerminal,
 } from "lucide-react"
 
@@ -41,7 +38,7 @@ const data = {
       ],
     },
     {
-      groupLabel: "Products",
+      groupLabel: "Merchandise",
       items: [
         {
           title: "Products Dashboard",
@@ -50,11 +47,11 @@ const data = {
           isActive: true,
           items: [
             {
-              title: "Products",
+              title: "All Products",
               url: "/app/products",
             },
             {
-              title: "Products",
+              title: "Product Types",
               url: "/app/products/types",
             },
           ],
