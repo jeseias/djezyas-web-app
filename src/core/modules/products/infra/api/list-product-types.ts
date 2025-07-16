@@ -37,7 +37,7 @@ const LIST_PRODUCT_TYPES_QUERY = `#graphql
 
 export const listProductTypes = async (params: ListProductTypes.Params): Promise<ListProductTypes.Result> => {
   const result = await gqlr<{ data: { listProductTypes: ListProductTypes.Result } }>(LIST_PRODUCT_TYPES_QUERY, { input: params });
-  console.log(result);
+
   return {
     items: result.data.listProductTypes.items,
     totalItems: result.data.listProductTypes.totalItems,
