@@ -6,7 +6,7 @@ export function AllProductsPage() {
   const [showCreateDialog, setShowCreateDialog] = useState(false)
   const { data, isLoading, error } = useApiFindProductsByOrganization({})
   
-  const products = Array.isArray(data) ? data : []
+  const products = data?.items || []
 
   if (isLoading) {
     return (
@@ -41,7 +41,7 @@ export function AllProductsPage() {
         onOpenChange={setShowCreateDialog}
       />
       
-      <ProductsTable products={products} />
+      <ProductsTable products={products} isLoading={isLoading} />
     </div>
   )
 } 

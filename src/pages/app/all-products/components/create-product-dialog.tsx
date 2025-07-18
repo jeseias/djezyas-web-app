@@ -1,22 +1,21 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
-import { Plus, Upload, X } from "lucide-react"
+import { Upload, X } from "lucide-react"
 import { useApiSaveProduct, useApiListProductCategories, useApiListProductTypes } from "@/core/modules/products/infra/hooks"
 import { Product } from "@/core/modules/products/domain/entities"
 import { ImageCropper } from "./image-cropper"
 import { useOrganization } from "@/core/modules/organization/context/organization-context"
 import { toast } from "sonner"
 
-// Form schema
 const productFormSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
@@ -40,7 +39,7 @@ const productFormSchema = z.object({
 type ProductFormData = z.infer<typeof productFormSchema>
 
 interface CreateProductDialogProps {
-  product?: Product.Model // For editing existing product
+  product?: Product.Model 
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }
@@ -54,12 +53,10 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
   const { organization } = useOrganization()
   const saveProductMutation = useApiSaveProduct()
   
-  // Fetch categories and product types
   const { data: categoriesData, isLoading: categoriesLoading } = useApiListProductCategories({})
   
   const { data: productTypesData, isLoading: productTypesLoading } = useApiListProductTypes({})
 
-  // Use controlled state if provided, otherwise use internal state
   const isOpen = open !== undefined ? open : internalOpen
   const setIsOpen = onOpenChange || setInternalOpen
 
@@ -70,8 +67,8 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
       name: product?.name || "",
       description: product?.description || "",
       categoryId: product?.categoryId || "",
-      organizationId: product?.organizationId || "",
-      productTypeId: organization?.id,
+      organizationId: organization?.id || "",
+      productTypeId: product?.productTypeId || "",
       status: product?.status || Product.Status.DRAFT,
       sku: product?.sku || "",
       barcode: product?.barcode || "",
@@ -81,6 +78,32 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
     },
   })
 
+  useEffect(() => {
+    if (organization?.id) {
+      form.setValue("organizationId", organization.id)
+    }
+  }, [organization?.id, form])
+
+  useEffect(() => {
+    if (isOpen && !product) {
+      form.reset({
+        name: "",
+        description: "",
+        categoryId: "",
+        organizationId: organization?.id || "",
+        productTypeId: "",
+        status: Product.Status.DRAFT,
+        sku: "",
+        barcode: "",
+        weight: undefined,
+        dimensions: undefined,
+        meta: undefined,
+      })
+      setImagePreview(null)
+      setOriginalImageFile(null)
+    }
+  }, [isOpen, product, organization?.id, form])
+
   if (!organization) {
     return null
   }
@@ -89,7 +112,6 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
     const file = event.target.files?.[0]
     if (file) {
       setOriginalImageFile(file)
-      // Create preview
       const reader = new FileReader()
       reader.onload = (e) => {
         setImagePreview(e.target?.result as string)
@@ -103,7 +125,6 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
     form.setValue("imageUrl", croppedImage)
     setShowCropper(false)
     
-    // Update preview with cropped image
     const reader = new FileReader()
     reader.onload = (e) => {
       setImagePreview(e.target?.result as string)
@@ -131,13 +152,12 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
   }
 
   const onSubmit = async (data: ProductFormData) => {
-    // if (!organization) {
-    //   toast.error("Organization not found")
-    //   return
-    // }
+    if (!organization) {
+      toast.error("Organization not found")
+      return
+    }
 
     try {
-      // Only include dimensions if all three values are provided
       const submitData = {
         ...data,
         dimensions: data.dimensions?.length && data.dimensions?.width && data.dimensions?.height 
@@ -154,8 +174,10 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
       form.reset()
       setImagePreview(null)
       setOriginalImageFile(null)
+      toast.success("Product created successfully!")
     } catch (error) {
       console.error("Failed to save product:", error)
+      toast.error("Failed to create product. Please try again.")
     }
   }
 
@@ -457,6 +479,20 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
               </div>
             </div>
 
+            {/* Debug Info */}
+            {process.env.NODE_ENV === 'development' && (
+              <div className="text-xs text-muted-foreground p-2 bg-muted rounded">
+                <div>Form Valid: {form.formState.isValid ? 'Yes' : 'No'}</div>
+                <div>Organization ID: {form.watch('organizationId')}</div>
+                <div>Category ID: {form.watch('categoryId')}</div>
+                <div>Product Type ID: {form.watch('productTypeId')}</div>
+                <div>Name: {form.watch('name')}</div>
+                {Object.keys(form.formState.errors).length > 0 && (
+                  <div>Errors: {JSON.stringify(form.formState.errors)}</div>
+                )}
+              </div>
+            )}
+
             {/* Action Buttons */}
             <div className="flex justify-end gap-2">
               <Button
@@ -468,7 +504,7 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
               </Button>
               <Button 
                 type="submit" 
-                disabled={saveProductMutation.isPending}
+                disabled={saveProductMutation.isPending || !form.formState.isValid}
               >
                 {saveProductMutation.isPending ? "Saving..." : (product ? "Update Product" : "Create Product")}
               </Button>
