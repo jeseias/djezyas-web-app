@@ -29,10 +29,6 @@ const data = {
               title: "Members",
               url: "/app/members",
             },
-            {
-              title: "Products",
-              url: "/app/products",
-            },
           ],
         },
       ],
