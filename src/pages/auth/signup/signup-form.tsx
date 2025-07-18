@@ -14,6 +14,9 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { MrPasswordInput } from "@/components/mr-password-input"
+import { useSignup } from "@/core/modules/user/infra/hooks/use-signup"
+import { useNavigate } from "@tanstack/react-router"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -26,6 +29,9 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 export const SignupForm = () => {
+  const navigate = useNavigate()
+  const signupMutation = useSignup()
+  
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,8 +43,31 @@ export const SignupForm = () => {
     },
   })
 
-  function onSubmit(values: FormValues) {
-    console.log(values)
+  async function onSubmit(values: FormValues) {
+    try {
+      await signupMutation.mutateAsync({
+        email: values.email,
+        name: values.name,
+        username: values.username,
+        phone: values.phone,
+        password: values.password,
+      })
+      
+      toast.success("Account created successfully! Please check your email to verify your account.")
+      navigate({ 
+        to: "/verify-email",
+        search: { email: values.email }
+      })
+    } catch (error: any) {
+      console.error("Signup failed:", error)
+      
+      // Handle specific error messages
+      const errorMessage = error?.response?.errors?.[0]?.message || 
+                          error?.message || 
+                          "Failed to create account. Please try again."
+      
+      toast.error(errorMessage)
+    }
   }
 
   return (
@@ -126,8 +155,12 @@ export const SignupForm = () => {
               )}
             />
           </div>
-          <Button type="submit" className="w-full">
-            Create Account
+          <Button 
+            type="submit" 
+            className="w-full"
+            disabled={signupMutation.isPending || !form.formState.isValid}
+          >
+            {signupMutation.isPending ? "Creating Account..." : "Create Account"}
           </Button>
         </div>
         <div className="text-center text-sm">
