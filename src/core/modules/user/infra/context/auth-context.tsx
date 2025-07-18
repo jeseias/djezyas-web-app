@@ -3,6 +3,7 @@ import { User } from "../../domain/entities"
 import type { Login } from "../api"
 import Cookies from "js-cookie";
 import { Constants } from "@/core/config/constants";
+import { cookies } from "@/lib/cookies"
 
 type SignInProps = Login.Response['data']['login']
 
@@ -67,6 +68,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       Cookies.remove(Constants.ACCESS_TOKEN_EXPIRES_IN_KEY)
       Cookies.remove(Constants.REFRESH_TOKEN_EXPIRES_IN_KEY)
 
+      // Also clear the organization cookie on force logout
+      cookies.removeSelectedOrganization()
+
       setUser(null)
       setTokens(null)
       setIsAuthenticated(false)
@@ -108,6 +112,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     Cookies.remove(Constants.REFRESH_TOKEN_KEY)
     Cookies.remove(Constants.ACCESS_TOKEN_EXPIRES_IN_KEY)
     Cookies.remove(Constants.REFRESH_TOKEN_EXPIRES_IN_KEY)
+
+    // Also clear the organization cookie on logout
+    cookies.removeSelectedOrganization()
 
     setIsAuthenticated(false)
 

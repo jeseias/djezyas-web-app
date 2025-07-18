@@ -3,12 +3,14 @@ import { useNavigate } from '@tanstack/react-router'
 import type { Organization } from "../domain/entities/organization"
 import { useApiLoadMyOrganizations } from "../infra/hooks"
 import { useAuth } from "@/core/modules/user/infra/context/auth-context"
+import { cookies } from "@/lib/cookies"
 
 type OrganizationContextType = {
   organization: Organization.Summary | null
   isLoading: boolean
   allMyOrganizations: Organization.Summary[]
   setOrganization: (organization: Organization.Summary) => void
+  clearOrganization: () => void
   hasOrganizations: boolean
 }
 
@@ -30,8 +32,21 @@ export const OrganizationProvider = ({ children }: OrganizationProviderProps) =>
 
   const isLoading = authLoading || (isAuthenticated && orgLoading)
 
+  // Load organization from cookies on initial load
   useEffect(() => {
     if (hasOrganizations && !selectedOrganization) {
+      const savedOrganizationId = cookies.getSelectedOrganization()
+      
+      if (savedOrganizationId) {
+        // Try to find the saved organization in the user's organizations
+        const savedOrg = allMyOrganizations.find(org => org.id === savedOrganizationId)
+        if (savedOrg) {
+          setSelectedOrganization(savedOrg)
+          return
+        }
+      }
+      
+      // Fallback to first organization if saved org not found or no saved org
       setSelectedOrganization(allMyOrganizations[0])
     }
   }, [hasOrganizations, selectedOrganization, allMyOrganizations])
@@ -42,9 +57,22 @@ export const OrganizationProvider = ({ children }: OrganizationProviderProps) =>
     }
   }, [ isLoading, hasOrganizations, navigate])
 
+  // Custom setOrganization function that also saves to cookies
+  const setOrganizationWithPersistence = (organization: Organization.Summary) => {
+    setSelectedOrganization(organization)
+    cookies.setSelectedOrganization(organization.id)
+  }
+
+  // Function to clear organization from state and cookies
+  const clearOrganization = () => {
+    setSelectedOrganization(null)
+    cookies.removeSelectedOrganization()
+  }
+
   const value = useMemo(() => ({
     organization: selectedOrganization,
-    setOrganization: setSelectedOrganization,
+    setOrganization: setOrganizationWithPersistence,
+    clearOrganization,
     allMyOrganizations,
     hasOrganizations,
     isLoading,
