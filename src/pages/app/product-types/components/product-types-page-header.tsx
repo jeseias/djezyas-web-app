@@ -10,7 +10,7 @@ interface ProductTypesPageHeaderProps {
 }
 
 export function ProductTypesPageHeader({
-  productTypeCount,
+  // productTypeCount,
   onSearch,
   onCreateProductType,
   searchValue,

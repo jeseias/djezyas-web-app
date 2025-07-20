@@ -16,7 +16,7 @@ export const useApiInviteMember = () => {
       }
       return (await inviteMember(input)).data
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       // Invalidate and refetch organization members to show the new invitation
       queryClient.invalidateQueries({
         queryKey: ['getOrganizationMembers', variables.organizationId]

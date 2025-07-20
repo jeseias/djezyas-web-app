@@ -36,7 +36,6 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Organization } from "@/core/modules/organization/domain/entities/organization"
 import type { LoadMyInvitations } from "@/core/modules/organization/infra/api/load-my-invitations"
 

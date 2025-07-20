@@ -15,7 +15,7 @@ export const ProductCategoriesPage = () => {
   const createMutation = useApiCreateProductCategory()
   
   const allCategories = data?.items || []
-  const totalItems = data?.totalItems || 0
+  // const totalItems = data?.totalItems || 0
 
   // Frontend filtering
   const filteredCategories = allCategories.filter(category =>

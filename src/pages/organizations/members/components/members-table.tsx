@@ -133,7 +133,7 @@ const columns: ColumnDef<Member>[] = [
       return (
         <div className="flex items-center gap-1 text-sm text-muted-foreground">
           <Calendar className="h-3 w-3" />
-          {joinedAt ? new Date(joinedAt).toLocaleDateString() : "Pending"}
+          {joinedAt ? new Date(Number(joinedAt)).toLocaleDateString() : "Pending"}
         </div>
       )
     },

@@ -1,7 +1,6 @@
 import {
   BadgeCheck,
   Bell,
-  BookDashed,
   ChevronsUpDown,
   CreditCard,
   LayoutDashboard,

@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 
 interface ImageCropperProps {
   imageSrc: string
