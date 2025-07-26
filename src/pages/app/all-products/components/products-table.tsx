@@ -13,7 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal, Package, Tag, Hash } from "lucide-react"
+import { ArrowUpDown, ChevronDown, MoreHorizontal, Package, Tag, Hash, DollarSign } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -116,6 +116,35 @@ const columns: ColumnDef<Product.Model>[] = [
         <div className="flex items-center gap-1 text-sm">
           <Hash className="h-3 w-3 text-muted-foreground" />
           {sku || "N/A"}
+        </div>
+      )
+    },
+  },
+  {
+    accessorKey: "default_price",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Price
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const price = row.getValue("default_price") as any
+      return (
+        <div className="flex items-center gap-1 text-sm">
+          <DollarSign className="h-3 w-3 text-muted-foreground" />
+          {price ? (
+            <span className="font-medium">
+              {price.unitAmount} {price.currency}
+            </span>
+          ) : (
+            <span className="text-muted-foreground">No price</span>
+          )}
         </div>
       )
     },
@@ -268,6 +297,7 @@ export function ProductsTable({ products, isLoading }: ProductsTableProps) {
                 <TableHead className="w-12"></TableHead>
                 <TableHead>Product</TableHead>
                 <TableHead>SKU</TableHead>
+                <TableHead>Price</TableHead>
                 <TableHead>Category</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Created</TableHead>
@@ -280,6 +310,7 @@ export function ProductsTable({ products, isLoading }: ProductsTableProps) {
                   <TableCell><div className="h-4 w-4 bg-muted rounded animate-pulse" /></TableCell>
                   <TableCell><div className="h-4 w-32 bg-muted rounded animate-pulse" /></TableCell>
                   <TableCell><div className="h-4 w-16 bg-muted rounded animate-pulse" /></TableCell>
+                  <TableCell><div className="h-4 w-20 bg-muted rounded animate-pulse" /></TableCell>
                   <TableCell><div className="h-4 w-20 bg-muted rounded animate-pulse" /></TableCell>
                   <TableCell><div className="h-4 w-16 bg-muted rounded animate-pulse" /></TableCell>
                   <TableCell><div className="h-4 w-24 bg-muted rounded animate-pulse" /></TableCell>
