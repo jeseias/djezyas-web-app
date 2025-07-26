@@ -1,5 +1,5 @@
 import { gqlr } from "@/core/modules/shared";
-import type { Product } from "../../domain/entities";
+import type { Price, Product } from "../../domain/entities";
 
 export namespace FindProductsByOrganization {
   export type Filters = {
@@ -18,6 +18,11 @@ export namespace FindProductsByOrganization {
     page?: number;
     sortBy?: string;
     sortOrder?: string;
+    default_price: {
+      unitAmount: number
+      currency: string
+      type: Price.Type
+    }
   };
 
   export type Params = {
@@ -52,6 +57,12 @@ const FIND_PRODUCTS_BY_ORGANIZATION_QUERY = `#graphql
           length
           width
           height
+        }
+        default_price {
+          id 
+          currency 
+          unitAmount 
+          type 
         }
         meta
         createdAt
