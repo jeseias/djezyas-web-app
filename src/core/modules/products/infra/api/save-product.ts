@@ -8,6 +8,15 @@ export namespace SaveProduct {
     height: number;
   };
 
+  export type Price = {
+    currency: string;
+    unitAmount: number;
+    type?: string;
+    status?: string;
+    validFrom?: Date;
+    validUntil?: Date;
+  };
+
   export type Params = {
     id?: string;
     name: string;
@@ -22,6 +31,7 @@ export namespace SaveProduct {
     weight?: number;
     dimensions?: Dimensions;
     meta?: Record<string, any>;
+    price: Price;
   };
 
   export type Result = Product.Model;
@@ -30,23 +40,26 @@ export namespace SaveProduct {
 export const saveProduct = async (params: SaveProduct.Params): Promise<SaveProduct.Result> => {
   const formData = new FormData();
   
-  // Add all fields to FormData
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined) {
       if (key === 'dimensions' && typeof value === 'object') {
-        // Handle dimensions by adding each dimension as a separate field
         const dimensions = value as SaveProduct.Dimensions;
         formData.append('dimensions[length]', String(dimensions.length));
         formData.append('dimensions[width]', String(dimensions.width));
         formData.append('dimensions[height]', String(dimensions.height));
+      } else if (key === 'price' && typeof value === 'object') {
+        const price = value as SaveProduct.Price;
+        formData.append('price[currency]', price.currency);
+        formData.append('price[unitAmount]', String(price.unitAmount));
+        if (price.type) formData.append('price[type]', price.type);
+        if (price.status) formData.append('price[status]', price.status);
+        if (price.validFrom) formData.append('price[validFrom]', price.validFrom.toISOString());
+        if (price.validUntil) formData.append('price[validUntil]', price.validUntil.toISOString());
       } else if (key === 'meta' && typeof value === 'object') {
-        // Handle meta by stringifying it
         formData.append(key, JSON.stringify(value));
       } else if (value instanceof File) {
-        // Handle File objects
         formData.append(key, value);
       } else {
-        // Convert all other types to string
         formData.append(key, String(value));
       }
     }

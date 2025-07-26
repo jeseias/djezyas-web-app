@@ -16,6 +16,26 @@ import { ImageCropper } from "./image-cropper"
 import { useOrganization } from "@/core/modules/organization/context/organization-context"
 import { toast } from "sonner"
 
+// Currency list
+const currencyList = [
+  { code: "AOA", name: "Angolan Kwanza" },
+];
+
+// Price types
+const priceTypes = [
+  { value: "ONE_TIME", label: "One Time" },
+  { value: "RECURRING", label: "Recurring" },
+  { value: "USAGE", label: "Usage Based" },
+];
+
+// Price statuses
+const priceStatuses = [
+  { value: "ACTIVE", label: "Active" },
+  { value: "INACTIVE", label: "Inactive" },
+  { value: "DRAFT", label: "Draft" },
+];
+
+// Updated form schema to match server requirements
 const productFormSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
@@ -34,6 +54,14 @@ const productFormSchema = z.object({
     height: z.number().positive().optional(),
   }).optional(),
   meta: z.record(z.any()).optional(),
+  price: z.object({
+    currency: z.string().min(1, "Currency is required"),
+    unitAmount: z.number().positive("Unit amount must be positive"),
+    type: z.string().optional(),
+    status: z.string().optional(),
+    validFrom: z.string().optional(),
+    validUntil: z.string().optional(),
+  }),
 })
 
 type ProductFormData = z.infer<typeof productFormSchema>
@@ -75,6 +103,14 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
       weight: product?.weight,
       dimensions: product?.dimensions,
       meta: product?.meta,
+      price: {
+        currency: "DZD",
+        unitAmount: 0,
+        type: undefined,
+        status: undefined,
+        validFrom: undefined,
+        validUntil: undefined,
+      },
     },
   })
 
@@ -98,6 +134,14 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
         weight: undefined,
         dimensions: undefined,
         meta: undefined,
+        price: {
+          currency: "DZD",
+          unitAmount: 0,
+          type: undefined,
+          status: undefined,
+          validFrom: undefined,
+          validUntil: undefined,
+        },
       })
       setImagePreview(null)
       setOriginalImageFile(null)
@@ -166,7 +210,12 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
               width: data.dimensions.width,
               height: data.dimensions.height,
             }
-          : undefined
+          : undefined,
+        price: {
+          ...data.price,
+          validFrom: data.price.validFrom ? new Date(data.price.validFrom) : undefined,
+          validUntil: data.price.validUntil ? new Date(data.price.validUntil) : undefined,
+        }
       }
       
       await saveProductMutation.mutateAsync(submitData)
@@ -479,6 +528,139 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
               </div>
             </div>
 
+            {/* Price */}
+            <div className="space-y-4">
+              <FormLabel>Price</FormLabel>
+              <div className="grid grid-cols-2 gap-4">
+                {/* Currency (searchable select) */}
+                <FormField
+                  control={form.control}
+                  name="price.currency"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Currency *</FormLabel>
+                      <CurrencySearchSelect
+                        value={field.value}
+                        onChange={field.onChange}
+                        currencyList={currencyList}
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Unit Amount */}
+                <FormField
+                  control={form.control}
+                  name="price.unitAmount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Unit Amount *</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          placeholder="0.00"
+                          {...field}
+                          onChange={e => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {/* Type */}
+                <FormField
+                  control={form.control}
+                  name="price.type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Type</FormLabel>
+                      <FormControl>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {priceTypes.map(type => (
+                              <SelectItem key={type.value} value={type.value}>
+                                {type.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Status */}
+                <FormField
+                  control={form.control}
+                  name="price.status"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Status</FormLabel>
+                      <FormControl>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {priceStatuses.map(status => (
+                              <SelectItem key={status.value} value={status.value}>
+                                {status.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {/* Valid From */}
+                <FormField
+                  control={form.control}
+                  name="price.validFrom"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Valid From</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="date"
+                          value={field.value || ""}
+                          onChange={e => field.onChange(e.target.value || undefined)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Valid Until */}
+                <FormField
+                  control={form.control}
+                  name="price.validUntil"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Valid Until</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="date"
+                          value={field.value || ""}
+                          onChange={e => field.onChange(e.target.value || undefined)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
             {/* Debug Info */}
             {process.env.NODE_ENV === 'development' && (
               <div className="text-xs text-muted-foreground p-2 bg-muted rounded">
@@ -530,4 +712,38 @@ export function CreateProductDialog({ product, open, onOpenChange }: CreateProdu
       </DialogContent>
     </Dialog>
   )
+} 
+
+function CurrencySearchSelect({ value, onChange, currencyList }: { value: string; onChange: (v: string) => void; currencyList: { code: string; name: string }[] }) {
+  const [search, setSearch] = useState("");
+  const filtered = currencyList.filter(c => c.code.toLowerCase().includes(search.toLowerCase()) || c.name.toLowerCase().includes(search.toLowerCase()));
+  const selected = currencyList.find(c => c.code === value);
+  
+  return (
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger>
+        <SelectValue placeholder="Select currency">
+          {selected ? `${selected.code} - ${selected.name}` : "Select currency"}
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent>
+        <div className="p-2">
+          <Input
+            placeholder="Search currency..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="mb-2"
+          />
+        </div>
+        <div className="max-h-48 overflow-y-auto">
+          {filtered.length === 0 && <div className="p-2 text-muted-foreground">No results</div>}
+          {filtered.map(c => (
+            <SelectItem key={c.code} value={c.code}>
+              {c.code} - {c.name}
+            </SelectItem>
+          ))}
+        </div>
+      </SelectContent>
+    </Select>
+  );
 } 
