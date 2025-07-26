@@ -4,7 +4,8 @@ import { ProductsTable, ProductsPageHeader, CreateProductDialog } from "./compon
 
 export function AllProductsPage() {
   const [showCreateDialog, setShowCreateDialog] = useState(false)
-  const { data, isLoading, error } = useApiFindProductsByOrganization({})
+  const { data, isLoading, error } = useApiFindProductsByOrganization({
+  })
   
   const products = data?.items || []
 

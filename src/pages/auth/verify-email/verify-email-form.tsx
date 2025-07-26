@@ -15,6 +15,7 @@ import {
 import { useVerifyEmail, useResendVerification } from "@/core/modules/user/infra/hooks"
 import { useSearch } from "@tanstack/react-router"
 import { useState } from "react"
+import { Link } from "@tanstack/react-router"
 
 const formSchema = z.object({
   verificationCode: z.string().min(6, "Verification code must be at least 6 characters"),
@@ -101,9 +102,9 @@ export const VerifyEmailForm = () => {
         </div>
         
         <div className="text-center text-sm">
-          <a href="/login" className="underline underline-offset-4">
+          <Link to="/login" className="underline underline-offset-4" search={{ message: 'Please login' }}>
             Back to login
-          </a>
+          </Link>
         </div>
       </form>
     </Form>

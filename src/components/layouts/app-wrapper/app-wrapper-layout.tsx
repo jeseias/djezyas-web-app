@@ -2,8 +2,9 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import type { PropsWithChildren } from "react"
 import { AppSidebar } from "./app-sidebar"
 import { Separator } from "@/components/ui/separator"
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 import { useAuth } from "@/core/modules/user/infra/context"
+import { Link } from "@tanstack/react-router"
 
 export const AppWrapperLayout = ({ children }: PropsWithChildren) => {
   const { isAdmin } = useAuth()
@@ -28,13 +29,17 @@ export const AppWrapperLayout = ({ children }: PropsWithChildren) => {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                  <BreadcrumbLink asChild>
+                    <Link to="/app">Dashboard</Link>
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
           {isAdmin && (
-            <a href="/office">Office</a>
+            <Link to="/office" className="text-sm text-muted-foreground hover:text-foreground">
+              Office
+            </Link>
           )}
         </header>
         <main>

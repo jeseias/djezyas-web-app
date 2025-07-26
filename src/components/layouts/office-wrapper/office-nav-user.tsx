@@ -3,9 +3,9 @@ import {
   Bell,
   ChevronsUpDown,
   CreditCard,
-  LayoutDashboard,
   LogOut,
   Sparkles,
+  Building2,
 } from "lucide-react"
 
 import {
@@ -29,6 +29,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/core/modules/user/infra/context/auth-context"
+import { Link } from "@tanstack/react-router"
 
 export function OfficeNavUser() {
   const { isMobile } = useSidebar()
@@ -84,15 +85,13 @@ export function OfficeNavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <a href="/app">
-              <DropdownMenuGroup className="cursor-pointer">
-                <DropdownMenuItem>
-                  <LayoutDashboard />
-                  App
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-            </a>
+            <DropdownMenuItem asChild>
+              <Link to="/app">
+                <Building2 className="mr-2 h-4 w-4" />
+                <span>App</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />

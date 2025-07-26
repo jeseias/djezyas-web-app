@@ -1,5 +1,6 @@
 import type { Id } from "../../../shared";
 import type { Slug } from "../../../shared/value-objects/slug";
+import type { Price } from "./price";
 
 export namespace Product {
   export enum Status {
@@ -33,5 +34,10 @@ export namespace Product {
     meta?: any;
     createdAt: Date;
     updatedAt: Date;
+    default_price: {
+      unitAmount: number
+      currency: string
+      type: Price.Type
+    }
   };
 } 

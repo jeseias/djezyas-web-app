@@ -17,6 +17,7 @@ import { MrPasswordInput } from "@/components/mr-password-input"
 import { useSignup } from "@/core/modules/user/infra/hooks/use-signup"
 import { useNavigate } from "@tanstack/react-router"
 import { toast } from "sonner"
+import { Link } from "@tanstack/react-router"
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -165,9 +166,9 @@ export const SignupForm = () => {
         </div>
         <div className="text-center text-sm">
           Already have an account?{" "}
-          <a href="/login" className="underline underline-offset-4">
+          <Link to="/login" className="underline underline-offset-4" search={{ message: 'Please login' }}>
             Sign in
-          </a>
+          </Link>
         </div>
       </form>
     </Form>
