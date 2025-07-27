@@ -6,6 +6,7 @@ import Cookies from "js-cookie"
 
 export const api = axios.create({
   baseURL: _env.VITE_API_URL,
+  withCredentials: true
 })
 
 api.interceptors.request.use(
