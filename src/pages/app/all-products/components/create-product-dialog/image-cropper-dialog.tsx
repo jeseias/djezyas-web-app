@@ -1,37 +1,32 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { ImageCropper } from "../image-cropper"
+import { ImageCropper } from "@/pages/app/all-products/components/image-cropper"
 
 interface ImageCropperDialogProps {
   showCropper: boolean
   setShowCropper: (show: boolean) => void
-  onCropComplete: (croppedFile: File) => void
+  onCropComplete: (croppedImage: File) => void
   onCropCancel: () => void
-  imageSrc?: string | null
+  originalImageSrc: string | null
+  currentCroppedImageSrc?: string | null
 }
 
-export const ImageCropperDialog = ({ 
-  showCropper, 
-  setShowCropper, 
-  onCropComplete, 
+export const ImageCropperDialog = ({
+  showCropper,
+  setShowCropper,
+  onCropComplete,
   onCropCancel,
-  imageSrc 
+  originalImageSrc,
+  currentCroppedImageSrc,
 }: ImageCropperDialogProps) => {
-  if (!showCropper || !imageSrc) {
-    return null
-  }
+  if (!originalImageSrc) return null
 
   return (
-    <Dialog open={showCropper} onOpenChange={setShowCropper}>
-      <DialogContent className="max-w-4xl">
-        <DialogHeader>
-          <DialogTitle>Crop Image</DialogTitle>
-        </DialogHeader>
-        <ImageCropper
-          imageSrc={imageSrc}
-          onCropComplete={onCropComplete}
-          onCancel={onCropCancel}
-        />
-      </DialogContent>
-    </Dialog>
+    <ImageCropper
+      originalImageSrc={originalImageSrc}
+      currentCroppedImageSrc={currentCroppedImageSrc}
+      onCropComplete={onCropComplete}
+      onCancel={onCropCancel}
+      open={showCropper}
+      onOpenChange={setShowCropper}
+    />
   )
 } 

@@ -6,6 +6,10 @@ interface ProductDetailsProps {
   form: UseFormReturn<any>
 }
 
+const handleNumberInput = (field: any, e: React.ChangeEvent<HTMLInputElement>) => {
+  field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)
+}
+
 export const ProductDetails = ({ form }: ProductDetailsProps) => {
   return (
     <>
@@ -39,27 +43,25 @@ export const ProductDetails = ({ form }: ProductDetailsProps) => {
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <FormField
-          control={form.control}
-          name="weight"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Weight (kg)</FormLabel>
-              <FormControl>
-                <Input 
-                  type="number" 
-                  step="0.01" 
-                  placeholder="0.00"
-                  {...field}
-                  onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
+      <FormField
+        control={form.control}
+        name="weight"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Weight (kg)</FormLabel>
+            <FormControl>
+              <Input 
+                type="number" 
+                step="0.01" 
+                placeholder="0.00"
+                {...field}
+                onChange={(e) => handleNumberInput(field, e)}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
       <div className="space-y-4">
         <FormLabel>Dimensions (cm)</FormLabel>
@@ -76,7 +78,7 @@ export const ProductDetails = ({ form }: ProductDetailsProps) => {
                     step="0.1" 
                     placeholder="0.0"
                     {...field}
-                    onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                    onChange={(e) => handleNumberInput(field, e)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -96,7 +98,7 @@ export const ProductDetails = ({ form }: ProductDetailsProps) => {
                     step="0.1" 
                     placeholder="0.0"
                     {...field}
-                    onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                    onChange={(e) => handleNumberInput(field, e)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -116,7 +118,7 @@ export const ProductDetails = ({ form }: ProductDetailsProps) => {
                     step="0.1" 
                     placeholder="0.0"
                     {...field}
-                    onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                    onChange={(e) => handleNumberInput(field, e)}
                   />
                 </FormControl>
                 <FormMessage />

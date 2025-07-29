@@ -21,7 +21,7 @@ export const ProductBasicInfo = ({ form }: ProductBasicInfoProps) => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name *</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input placeholder="Product name" {...field} />
               </FormControl>
@@ -78,7 +78,7 @@ export const ProductBasicInfo = ({ form }: ProductBasicInfoProps) => {
         name="productTypeId"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Product Type *</FormLabel>
+            <FormLabel>Product Type</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>

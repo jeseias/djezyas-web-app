@@ -9,8 +9,8 @@ export namespace SaveProduct {
   };
 
   export type Price = {
-    currency: string;
-    unitAmount: number;
+    currency?: string;
+    unitAmount?: number;
     type?: string;
     status?: string;
     validFrom?: Date;
@@ -19,18 +19,18 @@ export namespace SaveProduct {
 
   export type Params = {
     id?: string;
-    name: string;
+    name?: string;
     description?: string;
-    productTypeId: string;
+    productTypeId?: string;
     status?: Product.Status;
-    organizationId: string;
+    organizationId?: string;
     imageUrl?: File;
     sku?: string;
     barcode?: string;
     weight?: number;
     dimensions?: Dimensions;
     meta?: Record<string, any>;
-    price: Price;
+    price?: Price;
   };
 
   export type Result = Product.Model;
@@ -40,7 +40,7 @@ export const saveProduct = async (params: SaveProduct.Params): Promise<SaveProdu
   const formData = new FormData();
   
   Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined) {
+    if (value !== undefined && value !== null) {
       if (key === 'dimensions' && typeof value === 'object') {
         const dimensions = value as SaveProduct.Dimensions;
         formData.append('dimensions[length]', String(dimensions.length));
@@ -48,8 +48,8 @@ export const saveProduct = async (params: SaveProduct.Params): Promise<SaveProdu
         formData.append('dimensions[height]', String(dimensions.height));
       } else if (key === 'price' && typeof value === 'object') {
         const price = value as SaveProduct.Price;
-        formData.append('price[currency]', price.currency);
-        formData.append('price[unitAmount]', String(price.unitAmount));
+        if (price.currency) formData.append('price[currency]', price.currency);
+        if (price.unitAmount) formData.append('price[unitAmount]', String(price.unitAmount));
         if (price.type) formData.append('price[type]', price.type);
         if (price.status) formData.append('price[status]', price.status);
         if (price.validFrom) formData.append('price[validFrom]', price.validFrom.toISOString());

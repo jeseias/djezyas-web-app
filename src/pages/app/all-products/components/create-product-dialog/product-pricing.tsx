@@ -8,42 +8,41 @@ interface ProductPricingProps {
   form: UseFormReturn<any>
 }
 
-const priceTypes = [
+const PRICE_TYPES = [
   { value: "ONE_TIME", label: "One Time" },
   { value: "RECURRING", label: "Recurring" },
   { value: "USAGE", label: "Usage Based" },
-];
+] as const
 
-const priceStatuses = [
+const PRICE_STATUSES = [
   { value: "ACTIVE", label: "Active" },
   { value: "INACTIVE", label: "Inactive" },
   { value: "DRAFT", label: "Draft" },
-];
+] as const
 
 export const ProductPricing = ({ form }: ProductPricingProps) => {
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-4">
-        <FormField
-          control={form.control}
-          name="price.unitAmount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Price *</FormLabel>
-              <FormControl>
-                <MoneyInput
-                  value={field.value}
-                  onChange={field.onChange}
-                  currency={form.watch("price.currency")}
-                  onCurrencyChange={(currency) => form.setValue("price.currency", currency)}
-                  placeholder="0.00"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
+      <FormField
+        control={form.control}
+        name="price.unitAmount"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Price</FormLabel>
+            <FormControl>
+              <MoneyInput
+                value={field.value}
+                onChange={field.onChange}
+                currency={form.watch("price.currency")}
+                onCurrencyChange={(currency) => form.setValue("price.currency", currency)}
+                placeholder="0.00"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       <div className="grid grid-cols-2 gap-4">
         <FormField
           control={form.control}
@@ -57,7 +56,7 @@ export const ProductPricing = ({ form }: ProductPricingProps) => {
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent>
-                    {priceTypes.map(type => (
+                    {PRICE_TYPES.map(type => (
                       <SelectItem key={type.value} value={type.value}>
                         {type.label}
                       </SelectItem>
@@ -69,7 +68,7 @@ export const ProductPricing = ({ form }: ProductPricingProps) => {
             </FormItem>
           )}
         />
-        {/* Status */}
+
         <FormField
           control={form.control}
           name="price.status"
@@ -82,7 +81,7 @@ export const ProductPricing = ({ form }: ProductPricingProps) => {
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
-                    {priceStatuses.map(status => (
+                    {PRICE_STATUSES.map(status => (
                       <SelectItem key={status.value} value={status.value}>
                         {status.label}
                       </SelectItem>
@@ -95,8 +94,8 @@ export const ProductPricing = ({ form }: ProductPricingProps) => {
           )}
         />
       </div>
+
       <div className="grid grid-cols-2 gap-4">
-        {/* Valid From */}
         <FormField
           control={form.control}
           name="price.validFrom"
@@ -114,6 +113,7 @@ export const ProductPricing = ({ form }: ProductPricingProps) => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="price.validUntil"

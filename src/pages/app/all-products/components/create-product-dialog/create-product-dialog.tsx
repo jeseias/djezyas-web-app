@@ -21,29 +21,29 @@ import { ImageCropperDialog, ImageUploadSection, ProductBasicInfo, ProductDetail
 
 const productFormSchema = z.object({
   id: z.string().optional(),
-  name: z.string().min(1, "Name is required"),
+  name: z.string().optional(),
   description: z.string().optional(),
-  productTypeId: z.string().min(1, "Product type is required"),
+  productTypeId: z.string().optional(),
   status: z.nativeEnum(Product.Status).optional(),
-  organizationId: z.string().min(1, "Organization ID is required"),
+  organizationId: z.string().optional(),
   imageUrl: z.instanceof(File).optional(),
   sku: z.string().optional(),
   barcode: z.string().optional(),
-  weight: z.number().positive().optional(),
+  weight: z.number().optional(),
   dimensions: z.object({
-    length: z.number().positive(),
-    width: z.number().positive(),
-    height: z.number().positive(),
+    length: z.number(),
+    width: z.number(),
+    height: z.number(),
   }).optional(),
   meta: z.record(z.any()).optional(),
   price: z.object({
-    currency: z.string().min(1, "Currency is required"),
-    unitAmount: z.number().positive("Unit amount must be positive"),
+    currency: z.string().optional(),
+    unitAmount: z.number().positive().optional(),
     type: z.string().optional(),
     status: z.string().optional(),
     validFrom: z.string().optional(),
     validUntil: z.string().optional(),
-  }),
+  }).optional(),
 })
 
 type ProductFormData = z.infer<typeof productFormSchema>
@@ -54,12 +54,21 @@ interface CreateProductDialogProps {
   onOpenChange?: (open: boolean) => void
 }
 
-const steps = [
+interface Step {
+  id: number
+  title: string
+  description: string
+}
+
+const STEPS: Step[] = [
   { id: 1, title: "Basic Info", description: "Product name and type" },
   { id: 2, title: "Details", description: "SKU, barcode, dimensions" },
   { id: 3, title: "Image", description: "Upload product image" },
   { id: 4, title: "Pricing", description: "Set price and currency" },
 ]
+
+const MAX_FILE_SIZE_MB = 6
+const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024
 
 export const CreateProductDialog = ({ product, open, onOpenChange }: CreateProductDialogProps) => {
   const [currentStep, setCurrentStep] = useState(1)
@@ -68,9 +77,6 @@ export const CreateProductDialog = ({ product, open, onOpenChange }: CreateProdu
   const { organization } = useOrganization()
   const saveProductMutation = useApiSaveProduct()
 
-  // File upload for image preview
-  const maxSizeMB = 2
-  const maxSize = maxSizeMB * 1024 * 1024
   const [
     { files, isDragging, errors },
     {
@@ -84,12 +90,11 @@ export const CreateProductDialog = ({ product, open, onOpenChange }: CreateProdu
     },
   ] = useFileUpload({
     accept: "image/svg+xml,image/png,image/jpeg,image/jpg,image/gif",
-    maxSize,
+    maxSize: MAX_FILE_SIZE,
   })
-  const previewUrl = files[0]?.preview || null
 
-  const isOpen = open !== undefined ? open : false
-  const setIsOpen = onOpenChange || (() => {})
+  const isOpen = open ?? false
+  const setIsOpen = onOpenChange ?? (() => {})
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productFormSchema),
@@ -119,8 +124,6 @@ export const CreateProductDialog = ({ product, open, onOpenChange }: CreateProdu
     },
   })
 
-  const { errors: formErrors } = form.formState
-
   useEffect(() => {
     if (organization?.id) {
       form.setValue("organizationId", organization.id)
@@ -137,29 +140,39 @@ export const CreateProductDialog = ({ product, open, onOpenChange }: CreateProdu
     setShowCropper(false)
   }
 
+  const resetForm = () => {
+    form.reset()
+    setCurrentStep(1)
+    setShowCropper(false)
+    setCroppedImage(null)
+    if (files.length > 0) {
+      removeFile(files[0].id)
+    }
+  }
+
   const onSubmit = async (data: ProductFormData) => {
     try {
       const submitData = {
         ...data,
-        price: {
+        price: data.price && data.price.currency && data.price.unitAmount ? {
           ...data.price,
           validFrom: data.price.validFrom ? new Date(data.price.validFrom) : undefined,
           validUntil: data.price.validUntil ? new Date(data.price.validUntil) : undefined,
-        },
+        } : undefined,
         dimensions: data.dimensions?.length && data.dimensions?.width && data.dimensions?.height ? data.dimensions : undefined,
       }
 
       await saveProductMutation.mutateAsync(submitData)
       toast.success("Product created successfully")
+      resetForm()
       setIsOpen(false)
-      form.reset()
     } catch {
       toast.error("Failed to create product")
     }
   }
 
   const handleNextStep = () => {
-    if (currentStep < steps.length) {
+    if (currentStep < STEPS.length) {
       setCurrentStep(currentStep + 1)
     }
   }
@@ -184,7 +197,7 @@ export const CreateProductDialog = ({ product, open, onOpenChange }: CreateProdu
             setShowCropper={setShowCropper}
             croppedImage={croppedImage}
             setCroppedImage={setCroppedImage}
-            files={files}
+            files={files as any[]}
             isDragging={isDragging}
             errors={errors}
             handleDragEnter={handleDragEnter}
@@ -194,7 +207,7 @@ export const CreateProductDialog = ({ product, open, onOpenChange }: CreateProdu
             openFileDialog={openFileDialog}
             removeFile={removeFile}
             getInputProps={getInputProps}
-            maxSizeMB={maxSizeMB}
+            maxSizeMB={MAX_FILE_SIZE_MB}
           />
         )
       case 4:
@@ -204,6 +217,8 @@ export const CreateProductDialog = ({ product, open, onOpenChange }: CreateProdu
     }
   }
 
+  const currentStepData = STEPS[currentStep - 1]
+
   return (
     <Fragment>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -212,23 +227,21 @@ export const CreateProductDialog = ({ product, open, onOpenChange }: CreateProdu
             <DialogTitle>{product ? "Edit Product" : "Create New Product"}</DialogTitle>
           </DialogHeader>
           
-          {/* Stepper */}
           <div className="mb-6">
             <Stepper value={currentStep} onValueChange={setCurrentStep}>
-              {steps.map((step) => (
+              {STEPS.map((step) => (
                 <StepperItem key={step.id} step={step.id} className="not-last:flex-1">
                   <StepperTrigger asChild>
                     <StepperIndicator />
                   </StepperTrigger>
-                  {step.id < steps.length && <StepperSeparator />}
+                  {step.id < STEPS.length && <StepperSeparator />}
                 </StepperItem>
               ))}
             </Stepper>
             
-            {/* Step Title */}
             <div className="mt-4 text-center">
-              <h3 className="text-lg font-semibold">{steps[currentStep - 1]?.title}</h3>
-              <p className="text-muted-foreground text-sm">{steps[currentStep - 1]?.description}</p>
+              <h3 className="text-lg font-semibold">{currentStepData?.title}</h3>
+              <p className="text-muted-foreground text-sm">{currentStepData?.description}</p>
             </div>
           </div>
 
@@ -236,7 +249,6 @@ export const CreateProductDialog = ({ product, open, onOpenChange }: CreateProdu
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               {renderStepContent()}
               
-              {/* Navigation Buttons */}
               <div className="flex justify-between pt-6 border-t">
                 <Button
                   type="button"
@@ -248,11 +260,8 @@ export const CreateProductDialog = ({ product, open, onOpenChange }: CreateProdu
                 </Button>
                 
                 <div className="flex gap-2">
-                  {currentStep < steps.length ? (
-                    <Button
-                      type="button"
-                      onClick={handleNextStep}
-                    >
+                  {currentStep < STEPS.length ? (
+                    <Button type="button" onClick={handleNextStep}>
                       Next
                     </Button>
                   ) : (
@@ -270,14 +279,14 @@ export const CreateProductDialog = ({ product, open, onOpenChange }: CreateProdu
         </DialogContent>
       </Dialog>
       
-      {/* Image Cropper Dialog - rendered outside main dialog to avoid nesting */}
       <ImageCropperDialog
         showCropper={showCropper}
         setShowCropper={setShowCropper}
         onCropComplete={handleCropComplete}
         onCropCancel={handleCropCancel}
-        imageSrc={previewUrl}
+        originalImageSrc={files[0]?.preview || null}
+        currentCroppedImageSrc={croppedImage}
       />
-         </Fragment>
-   )
+    </Fragment>
+  )
 } 

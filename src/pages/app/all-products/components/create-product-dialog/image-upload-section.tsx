@@ -2,7 +2,13 @@ import { useEffect } from "react"
 import type { UseFormReturn } from "react-hook-form"
 import { FormLabel } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon } from "lucide-react"
+import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon, CropIcon } from "lucide-react"
+
+interface FileUploadState {
+  id: string
+  file: File
+  preview: string
+}
 
 interface ImageUploadSectionProps {
   form: UseFormReturn<any>
@@ -10,9 +16,10 @@ interface ImageUploadSectionProps {
   setShowCropper: (show: boolean) => void
   croppedImage: string | null
   setCroppedImage: (image: string | null) => void
-  files: any[]
+  files: FileUploadState[]
   isDragging: boolean
   errors: string[]
+  maxSizeMB: number
   handleDragEnter: (e: React.DragEvent<HTMLElement>) => void
   handleDragLeave: (e: React.DragEvent<HTMLElement>) => void
   handleDragOver: (e: React.DragEvent<HTMLElement>) => void
@@ -20,12 +27,10 @@ interface ImageUploadSectionProps {
   openFileDialog: () => void
   removeFile: (id: string) => void
   getInputProps: () => any
-  maxSizeMB: number
 }
 
 export const ImageUploadSection = ({ 
   form, 
-  showCropper, 
   setShowCropper, 
   croppedImage, 
   setCroppedImage,
@@ -42,13 +47,14 @@ export const ImageUploadSection = ({
   maxSizeMB
 }: ImageUploadSectionProps) => {
   const previewUrl = croppedImage || files[0]?.preview || null
+  const hasImage = files[0]?.preview || croppedImage
+  const hasCroppedImage = croppedImage
 
-  // Handle image selection - show cropper
   useEffect(() => {
-    if (previewUrl && !showCropper) {
-      setShowCropper(true)
+    if (files.length > 0 && files[0]?.file) {
+      form.setValue("imageUrl", files[0].file)
     }
-  }, [previewUrl, showCropper, setShowCropper])
+  }, [files, form])
 
   const handleRemoveImage = () => {
     setCroppedImage(null)
@@ -56,11 +62,14 @@ export const ImageUploadSection = ({
     removeFile(files[0]?.id || "")
   }
 
+  const handleCropImage = () => {
+    setShowCropper(true)
+  }
+
   return (
     <div className="space-y-4">
       <FormLabel>Product Image (Square - 1080x1080)</FormLabel>
       <div className="relative">
-        {/* Drop area */}
         <div
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
@@ -109,19 +118,27 @@ export const ImageUploadSection = ({
           )}
         </div>
 
-        {previewUrl && (
-          <div className="absolute top-4 right-4">
+        {hasImage && (
+          <div className="absolute top-4 right-4 flex gap-2">
+            <button
+              type="button"
+              onClick={handleCropImage}
+              className="bg-background/80 hover:bg-background/90 text-muted-foreground hover:text-foreground rounded-full p-1.5 transition-colors"
+              title={hasCroppedImage ? "Re-crop Image" : "Crop Image"}
+            >
+              <CropIcon className="size-4" />
+            </button>
             <button
               type="button"
               onClick={handleRemoveImage}
               className="bg-background/80 hover:bg-background/90 text-muted-foreground hover:text-foreground rounded-full p-1.5 transition-colors"
+              title="Remove Image"
             >
               <XIcon className="size-4" />
             </button>
           </div>
         )}
 
-        {/* Error display */}
         {errors.length > 0 && (
           <div className="mt-2 space-y-1">
             {errors.map((error, index) => (
