@@ -23,10 +23,13 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useApiListProductCategories } from "@/core/modules/products/infra/hooks"
 
 const createProductTypeSchema = z.object({
   name: z.string().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
   description: z.string().max(500, "Description must be less than 500 characters").optional(),
+  productCategoryId: z.string().min(1, "Product category is required"),
 })
 
 type CreateProductTypeForm = z.infer<typeof createProductTypeSchema>
@@ -36,6 +39,7 @@ interface CreateProductTypeDialogProps {
   onOpenChange: (open: boolean) => void
   onSubmit: (data: CreateProductTypeForm) => Promise<void>
   isLoading: boolean
+  organizationId: string
 }
 
 export function CreateProductTypeDialog({
@@ -46,11 +50,17 @@ export function CreateProductTypeDialog({
 }: CreateProductTypeDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const { data: productCategoriesData, isLoading: isLoadingCategories } = useApiListProductCategories({
+    page: 1,
+    limit: 100,
+  })
+
   const form = useForm<CreateProductTypeForm>({
     resolver: zodResolver(createProductTypeSchema),
     defaultValues: {
       name: "",
       description: "",
+      productCategoryId: "",
     },
   })
 
@@ -93,6 +103,31 @@ export function CreateProductTypeDialog({
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="productCategoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Product Category</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value} disabled={isSubmitting || isLoadingCategories}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a product category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {productCategoriesData?.items.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
             <FormField
               control={form.control}
               name="name"
@@ -139,7 +174,7 @@ export function CreateProductTypeDialog({
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isSubmitting || isLoading}>
+              <Button type="submit" disabled={isSubmitting || isLoading || isLoadingCategories}>
                 {isSubmitting || isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

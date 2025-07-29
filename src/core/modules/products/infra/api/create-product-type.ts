@@ -6,18 +6,20 @@ export namespace CreateProductType {
     name: string;
     description?: string;
     organizationId: string;
+    productCategoryId: string;
   };
 
   export type Result = ProductType.Model;
 }
 
 const CREATE_PRODUCT_TYPE_MUTATION = `#graphql
-  mutation CreateProductType($input: CreateProductTypeInput!) {
-    createProductType(input: $input) {
+  mutation CreateProductType($input: SaveProductTypeInput!) {
+    saveProductType(input: $input) {
       id
       name
       slug
       description
+      productCategoryId
       createdById
       organizationId
       createdAt

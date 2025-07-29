@@ -140,7 +140,10 @@ const columns: ColumnDef<Product.Model>[] = [
           <DollarSign className="h-3 w-3 text-muted-foreground" />
           {price ? (
             <span className="font-medium">
-              {price.unitAmount} {price.currency}
+              {price.unitAmount?.toLocaleString('pt-AO', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              })} {price.currency}
             </span>
           ) : (
             <span className="text-muted-foreground">No price</span>

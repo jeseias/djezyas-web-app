@@ -7,6 +7,7 @@ export namespace ProductType {
     name: string;
     slug: Slug;
     description?: string;
+    productCategoryId: Id;
     createdById: Id;
     organizationId: Id;
     createdAt: Date;

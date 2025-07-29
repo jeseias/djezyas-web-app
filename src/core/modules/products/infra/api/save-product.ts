@@ -21,7 +21,6 @@ export namespace SaveProduct {
     id?: string;
     name: string;
     description?: string;
-    categoryId: string;
     productTypeId: string;
     status?: Product.Status;
     organizationId: string;

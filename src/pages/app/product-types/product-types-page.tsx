@@ -20,7 +20,7 @@ export const ProductTypesPage = () => {
   const productTypes = data?.items || []
   const totalItems = data?.totalItems || 0
 
-  const handleCreateProductType = async (params: { name: string; description?: string }) => {
+  const handleCreateProductType = async (params: { name: string; description?: string; productCategoryId: string }) => {
     if (!organization?.id) {
       throw new Error("No organization selected")
     }
@@ -77,6 +77,7 @@ export const ProductTypesPage = () => {
         onOpenChange={setShowCreateDialog}
         onSubmit={handleCreateProductType}
         isLoading={createMutation.isPending}
+        organizationId={organization?.id || ""}
       />
       
       <ProductTypesTable 
