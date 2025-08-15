@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Link } from "@tanstack/react-router"
 import z from "zod"
 import { passwordSchema } from "@/core/modules/shared/value-objects/password"
 import { useForm } from "react-hook-form"
@@ -44,12 +43,6 @@ export const LoginForm = () => {
   return (
     <Form {...form}>
       <form className={cn("flex flex-col gap-6")} onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold">Login to your account</h1>
-          <p className="text-muted-foreground text-sm text-balance">
-            Enter your email below to login to your account
-          </p>
-        </div>
         <div className="grid gap-6">
           <div className="grid gap-3">
           <FormField
@@ -103,12 +96,6 @@ export const LoginForm = () => {
             </svg>
             Login with GitHub
           </Button> */}
-        </div>
-        <div className="text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <Link to="/signup" className="underline underline-offset-4">
-            Sign up
-          </Link>
         </div>
       </form>
     </Form>
