@@ -17,7 +17,6 @@ import { MrPasswordInput } from "@/components/mr-password-input"
 import { useSignup } from "@/core/modules/user/infra/hooks/use-signup"
 import { useNavigate } from "@tanstack/react-router"
 import { toast } from "sonner"
-import { Link } from "@tanstack/react-router"
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -74,12 +73,6 @@ export const SignupForm = () => {
   return (
     <Form {...form}>
       <form className={cn("flex flex-col gap-6")} onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold">Create your account</h1>
-          <p className="text-muted-foreground text-sm text-balance">
-            Enter your details below to create your account
-          </p>
-        </div>
         <div className="grid gap-6">
           <div className="grid gap-3">
             <FormField
@@ -163,12 +156,6 @@ export const SignupForm = () => {
           >
             {signupMutation.isPending ? "Creating Account..." : "Create Account"}
           </Button>
-        </div>
-        <div className="text-center text-sm">
-          Already have an account?{" "}
-          <Link to="/login" className="underline underline-offset-4" search={{ message: 'Please login' }}>
-            Sign in
-          </Link>
         </div>
       </form>
     </Form>
