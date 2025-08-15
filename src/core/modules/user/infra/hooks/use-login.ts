@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
+import { toast } from 'sonner'
 import { login, type Login } from '@/core/modules/user/infra/api'
 import { ErrorCode } from '@/core/modules/shared/errors'
 import { useAuth } from '../context/auth-context'
@@ -60,6 +61,12 @@ export const useLogin = () => {
         navigate({ 
           to: '/verify-email',
           search: { email: error.variables?.email || '' }
+        })
+      } else {
+        const errorMessage = error?.message || 'Login failed. Please check your credentials and try again.'
+        toast.error(errorMessage, {
+          description: 'Please verify your email and password are correct.',
+          duration: 5000,
         })
       }
     }

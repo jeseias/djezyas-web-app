@@ -53,13 +53,6 @@ export const VerifyEmailForm = () => {
   return (
     <Form {...form}>
       <form className={cn("flex flex-col gap-6")} onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold">Verify your email</h1>
-          <p className="text-muted-foreground text-sm text-balance">
-            We sent a verification code to <strong>{email}</strong>
-          </p>
-        </div>
-        
         <div className="grid gap-6">
           <div className="grid gap-3">
             <FormField
