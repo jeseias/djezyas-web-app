@@ -13,13 +13,6 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form"
-// import {
-// 	DropdownMenu,
-// 	DropdownMenuContent,
-// 	DropdownMenuItem,
-// 	DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu"
-// import { ChevronDown } from "lucide-react"
 import { useApiCreateOrganization } from "@/core/modules/organization/infra/hooks"
 import { toast } from "sonner"
 
@@ -52,6 +45,9 @@ export const CreateOrganizationPage = () => {
       },
       onError: (error) => {
         console.error("Failed to create organization:", error)
+        toast.error("Failed to create organization", {
+          description: "Please try again or contact support if the problem persists.",
+        })
       }
     })
   }

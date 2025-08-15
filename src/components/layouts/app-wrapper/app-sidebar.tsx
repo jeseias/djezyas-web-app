@@ -1,6 +1,11 @@
 import * as React from "react"
 import {
   SquareTerminal,
+  Users,
+  Mail,
+  Package,
+  Grid3X3,
+  Tag,
 } from "lucide-react"
 
 import {
@@ -23,15 +28,16 @@ const data = {
           title: "Overview",
           url: "/app",
           icon: SquareTerminal,
-          isActive: true,
           items: [
             {
               title: "Members",
               url: "/app/members",
+              icon: Users,
             },
             {
               title: "Invitations",
               url: "/app/invitations",
+              icon: Mail,
             },
           ],
         },
@@ -43,16 +49,17 @@ const data = {
         {
           title: "Products Dashboard",
           url: "/app/products",
-          icon: SquareTerminal,
-          isActive: true,
+          icon: Package,
           items: [
             {
               title: "All Products",
               url: "/app/products",
+              icon: Grid3X3,
             },
             {
               title: "Product Types",
               url: "/app/products/types",
+              icon: Tag,
             },
           ],
         },
@@ -63,18 +70,21 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
+    <Sidebar 
+      collapsible="icon" 
+      className="border-r border-border/50 bg-sidebar/95 backdrop-blur supports-[backdrop-filter]:bg-sidebar/60"
+      {...props}
+    >
+      <SidebarHeader className="border-b border-border/50 bg-sidebar/50">
         <OrganizationSwitcher />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="px-2 py-4">
         <NavMain items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="border-t border-border/50 bg-sidebar/50">
         <NavUser />
       </SidebarFooter>
-      <SidebarRail />
+      <SidebarRail className="border-r border-border/50" />
     </Sidebar>
   )
 }

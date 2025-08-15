@@ -13,9 +13,9 @@ export const AppWrapperLayout = ({ children }: PropsWithChildren) => {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset className="relative">
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
+            <SidebarTrigger className="-ml-1 hover:bg-accent hover:text-accent-foreground" />
             <Separator
               orientation="vertical"
               className="mr-2 data-[orientation=vertical]:h-4"
@@ -23,26 +23,29 @@ export const AppWrapperLayout = ({ children }: PropsWithChildren) => {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
+                  <BreadcrumbLink href="#" className="text-gradient-findora font-medium">
+                    Findora
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link to="/app">Dashboard</Link>
+                    <Link to="/app" className="hover:text-gradient-findora transition-colors">Dashboard</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
           {isAdmin && (
-            <Link to="/office" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link 
+              to="/office" 
+              className="text-sm text-muted-foreground hover:text-gradient-findora transition-colors font-medium"
+            >
               Office
             </Link>
           )}
         </header>
-        <main>
+        <main className="bg-gradient-to-br from-background via-background to-muted/20 min-h-[calc(100vh-4rem)]">
           {children}
         </main>
       </SidebarInset>

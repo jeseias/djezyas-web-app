@@ -9,15 +9,16 @@ interface ProductPricingProps {
 }
 
 const PRICE_TYPES = [
-  { value: "ONE_TIME", label: "One Time" },
-  { value: "RECURRING", label: "Recurring" },
-  { value: "USAGE", label: "Usage Based" },
+  { value: "regular", label: "Regular" },
+  { value: "sale", label: "Sale" },
+  { value: "wholesale", label: "Wholesale" },
+  { value: "bulk", label: "Bulk" },
 ] as const
 
 const PRICE_STATUSES = [
-  { value: "ACTIVE", label: "Active" },
-  { value: "INACTIVE", label: "Inactive" },
-  { value: "DRAFT", label: "Draft" },
+  { value: "active", label: "Active" },
+  { value: "inactive", label: "Inactive" },
+  { value: "expired", label: "Expired" },
 ] as const
 
 export const ProductPricing = ({ form }: ProductPricingProps) => {
