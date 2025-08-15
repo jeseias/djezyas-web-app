@@ -1,0 +1,7 @@
+export { HeroSection } from './hero-section'
+export { WhyFindoraSection } from './why-findora-section'
+export { FeaturesSection } from './features-section'
+export { HowItWorksSection } from './how-it-works-section'
+export { SocialProofSection } from './social-proof-section'
+export { FinalCTASection } from './final-cta-section'
+export { Footer } from './footer'
