@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useSearch, useNavigate } from "@tanstack/react-router"
 import { 
   Table, 
   TableBody, 
@@ -10,15 +9,10 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@/components/ui/checkbox"
 import { 
-  MoreHorizontalIcon, 
-  EyeIcon, 
   PackageIcon, 
   TruckIcon, 
-  CheckCircleIcon,
-  XCircleIcon,
   PrinterIcon,
   UserIcon
 } from "lucide-react"
@@ -35,8 +29,6 @@ interface OrdersTableProps {
 
 export function OrdersTable({ orders, isLoading, onOrderClick }: OrdersTableProps) {
   const [selectedOrders, setSelectedOrders] = useState<string[]>([])
-  const search = useSearch({ from: '/app/orders' })
-  const navigate = useNavigate()
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {

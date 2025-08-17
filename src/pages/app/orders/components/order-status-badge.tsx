@@ -73,13 +73,27 @@ const fulfillmentStatusConfig = {
 }
 
 export function OrderStatusBadge({ status, variant = "payment" }: OrderStatusBadgeProps) {
-  const config = variant === "payment" ? paymentStatusConfig : fulfillmentStatusConfig
-  
-  // For payment status, use the payment config
-  // For fulfillment status, we need to map the order status to fulfillment status
-  let displayStatus = status
-  let displayConfig = config[status as keyof typeof config]
-  
+  if (variant === "payment") {
+    const displayConfig = paymentStatusConfig[status]
+    
+    if (!displayConfig) {
+      return (
+        <Badge variant="outline" className="border-gray-300 text-gray-600">
+          {status}
+        </Badge>
+      )
+    }
+
+    return (
+      <Badge 
+        variant={displayConfig.variant} 
+        className={displayConfig.className}
+      >
+        {displayConfig.label}
+      </Badge>
+    )
+  }
+
   if (variant === "fulfillment") {
     // Map order status to fulfillment status
     const statusMapping: Record<OrderStatus, FulfillmentStatus> = {
@@ -90,24 +104,32 @@ export function OrderStatusBadge({ status, variant = "payment" }: OrderStatusBad
       [OrderStatus.IN_DELIVERY]: FulfillmentStatus.IN_DELIVERY,
       [OrderStatus.CLIENT_CONFIRMED_DELIVERY]: FulfillmentStatus.DELIVERED,
     }
-    displayStatus = statusMapping[status]
-    displayConfig = fulfillmentStatusConfig[displayStatus]
-  }
+    
+    const fulfillmentStatus = statusMapping[status]
+    const displayConfig = fulfillmentStatusConfig[fulfillmentStatus]
+    
+    if (!displayConfig) {
+      return (
+        <Badge variant="outline" className="border-gray-300 text-gray-600">
+          {fulfillmentStatus}
+        </Badge>
+      )
+    }
 
-  if (!displayConfig) {
     return (
-      <Badge variant="outline" className="border-gray-300 text-gray-600">
-        {status}
+      <Badge 
+        variant={displayConfig.variant} 
+        className={displayConfig.className}
+      >
+        {displayConfig.label}
       </Badge>
     )
   }
 
+  // Fallback for unknown variant
   return (
-    <Badge 
-      variant={displayConfig.variant} 
-      className={displayConfig.className}
-    >
-      {displayConfig.label}
+    <Badge variant="outline" className="border-gray-300 text-gray-600">
+      {status}
     </Badge>
   )
 }

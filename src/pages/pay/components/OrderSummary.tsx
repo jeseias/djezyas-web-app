@@ -11,7 +11,6 @@ interface OrderSummaryProps {
 export const OrderSummary = ({
   orders,
   totalAmount,
-  expiresAt,
   timeRemaining,
 }: OrderSummaryProps) => {
   const allItems = orders.flatMap((order) => order.items);

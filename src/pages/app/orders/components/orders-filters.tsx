@@ -3,7 +3,6 @@ import { useSearch, useNavigate } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { XIcon, SearchIcon, CalendarIcon } from "lucide-react"
@@ -14,6 +13,8 @@ const paymentStatusOptions = [
   { value: OrderStatus.PAID, label: "Paid", color: "bg-green-500" },
   { value: OrderStatus.CANCELLED, label: "Cancelled", color: "bg-red-500" },
   { value: OrderStatus.EXPIRED, label: "Expired", color: "bg-gray-500" },
+  { value: OrderStatus.IN_DELIVERY, label: "In Delivery", color: "bg-blue-500" },
+  { value: OrderStatus.CLIENT_CONFIRMED_DELIVERY, label: "Delivered", color: "bg-green-600" },
 ]
 
 const fulfillmentStatusOptions = [
@@ -70,16 +71,18 @@ export function OrdersFilters() {
   }
 
   const togglePaymentStatus = (status: OrderStatus) => {
-    const newStatuses = localFilters.paymentStatus.includes(status)
-      ? localFilters.paymentStatus.filter(s => s !== status)
-      : [...localFilters.paymentStatus, status]
+    const currentStatuses = localFilters.paymentStatus || []
+    const newStatuses = currentStatuses.includes(status)
+      ? currentStatuses.filter(s => s !== status)
+      : [...currentStatuses, status]
     setLocalFilters(prev => ({ ...prev, paymentStatus: newStatuses }))
   }
 
   const toggleFulfillmentStatus = (status: FulfillmentStatus) => {
-    const newStatuses = localFilters.fulfillmentStatus.includes(status)
-      ? localFilters.fulfillmentStatus.filter(s => s !== status)
-      : [...localFilters.fulfillmentStatus, status]
+    const currentStatuses = localFilters.fulfillmentStatus || []
+    const newStatuses = currentStatuses.includes(status)
+      ? currentStatuses.filter(s => s !== status)
+      : [...currentStatuses, status]
     setLocalFilters(prev => ({ ...prev, fulfillmentStatus: newStatuses }))
   }
 
@@ -154,8 +157,8 @@ export function OrdersFilters() {
               {paymentStatusOptions.map((option) => (
                 <Badge
                   key={option.value}
-                  variant={localFilters.paymentStatus.includes(option.value) ? "default" : "outline"}
-                  className={`cursor-pointer ${localFilters.paymentStatus.includes(option.value) ? option.color : ""}`}
+                  variant={localFilters.paymentStatus?.includes(option.value) ? "default" : "outline"}
+                  className={`cursor-pointer ${localFilters.paymentStatus?.includes(option.value) ? option.color : ""}`}
                   onClick={() => togglePaymentStatus(option.value)}
                 >
                   {option.label}
@@ -170,8 +173,8 @@ export function OrdersFilters() {
               {fulfillmentStatusOptions.map((option) => (
                 <Badge
                   key={option.value}
-                  variant={localFilters.fulfillmentStatus.includes(option.value) ? "default" : "outline"}
-                  className={`cursor-pointer ${localFilters.fulfillmentStatus.includes(option.value) ? option.color : ""}`}
+                  variant={localFilters.fulfillmentStatus?.includes(option.value) ? "default" : "outline"}
+                  className={`cursor-pointer ${localFilters.fulfillmentStatus?.includes(option.value) ? option.color : ""}`}
                   onClick={() => toggleFulfillmentStatus(option.value)}
                 >
                   {option.label}

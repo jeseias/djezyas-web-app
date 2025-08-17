@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useSearch } from "@tanstack/react-router"
 import { OrdersPageHeader } from "./components/orders-page-header"
 import { OrdersTable } from "./components/orders-table"
 import { OrdersFilters } from "./components/orders-filters"
@@ -7,11 +6,13 @@ import { OrderDetailDrawer } from "./components/order-detail-drawer"
 import { useOrders } from "./hooks/use-orders"
 
 export function OrdersPage() {
-  const search = useSearch({ from: '/app/orders' })
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
   const [showFilters, setShowFilters] = useState(false)
   
-  const { data, isLoading, error } = useOrders(search)
+  const { data, isLoading, error } = useOrders({
+    page: 1,
+    limit: 10,
+  })
   
   const orders = data?.items || []
   const totalCount = data?.totalCount || 0

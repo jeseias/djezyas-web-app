@@ -24,19 +24,8 @@ export const PayPage = () => {
   const [timeRemaining, setTimeRemaining] = useState<string>("");
   const [iframeError, setIframeError] = useState(false);
 
-  console.log('==>==> WEB APP PAY PAGE DEBUG ===>>==>');
-  console.log('Search params:', search);
-  console.log('Token from search:', token);
-  console.log('Token type:', typeof token);
-  console.log('Token length:', token?.length);
-
   const { data: session, isLoading, error } = useApiGetCheckoutSession(token || "");
 
-  console.log('Session data:', session);
-  console.log('Session loading:', isLoading);
-  console.log('Session error:', error);
-
-  // Handle postMessage events from EMIS iframe
   useEffect(() => {
     if (!session) return;
 
@@ -46,7 +35,6 @@ export const PayPage = () => {
 
       const nextStatus = mapEmisStatusToPaymentStatus(emisEvent.status);
 
-      // Update local UI state
       setTerminal({
         status: nextStatus,
         reference: emisEvent.reference,

@@ -5,12 +5,10 @@ import {
   MoreHorizontalIcon, 
   EyeIcon, 
   PackageIcon, 
-  TruckIcon, 
   CheckCircleIcon,
   XCircleIcon,
   PrinterIcon,
   UserIcon,
-  EditIcon
 } from "lucide-react"
 import { OrderStatus } from "../types/order.types"
 import type { Order } from "../types/order.types"
@@ -110,7 +108,7 @@ export function OrderActionsMenu({ order }: OrderActionsMenuProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        {actions.map((action, index) => (
+        {actions.map((action) => (
           <DropdownMenuItem
             key={action.action}
             onClick={() => handleAction(action.action)}
