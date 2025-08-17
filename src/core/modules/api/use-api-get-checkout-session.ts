@@ -10,6 +10,7 @@ const GET_CHECKOUT_SESSION_QUERY = `#graphql
       expiresAt
       provider
       totalAmount
+      transactionId
       orders {
         id
         userId
@@ -41,18 +42,6 @@ const GET_CHECKOUT_SESSION_QUERY = `#graphql
             unitAmount
           }
         }
-        totalAmount
-        fulfillmentStatus
-        paymentStatus
-        clientConfirmedIsDelivered
-        paymentIntentId
-        transactionId
-        paidAt
-        expiredAt
-        cancelledAt
-        meta
-        createdAt
-        updatedAt
       }
     }
   }
@@ -67,6 +56,7 @@ export namespace GetCheckoutSession {
 		data: {
 			checkoutSession: {
 				paymentIntentId: string;
+        transactionId: string
 				status: "pending" | "succeeded" | "failed" | "expired" | "cancelled";
 				expiresAt?: string;
 				provider: "multicaixa_express" | "stripe" | "afrimoney";

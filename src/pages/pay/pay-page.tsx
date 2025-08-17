@@ -24,7 +24,17 @@ export const PayPage = () => {
   const [timeRemaining, setTimeRemaining] = useState<string>("");
   const [iframeError, setIframeError] = useState(false);
 
+  console.log('==>==> WEB APP PAY PAGE DEBUG ===>>==>');
+  console.log('Search params:', search);
+  console.log('Token from search:', token);
+  console.log('Token type:', typeof token);
+  console.log('Token length:', token?.length);
+
   const { data: session, isLoading, error } = useApiGetCheckoutSession(token || "");
+
+  console.log('Session data:', session);
+  console.log('Session loading:', isLoading);
+  console.log('Session error:', error);
 
   // Handle postMessage events from EMIS iframe
   useEffect(() => {
@@ -139,9 +149,9 @@ export const PayPage = () => {
       </div>
     );
   }
-
   // Build iframe URL - fallback to token if no provider session
-  const iframeUrl = `${import.meta.env.VITE_EMIS_IFRAME_URL}/?token=${token}`;
+  // const iframeUrl = `${import.meta.env.VITE_EMIS_IFRAME_URL}?token=${token}`;
+  const iframeUrl = `https://pagamentonline.emis.co.ao/online-payment-gateway/portal/frame?token=${session.transactionId}`;
 
   return (
     <div className="min-h-screen bg-gray-50">
