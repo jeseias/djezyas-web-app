@@ -6,6 +6,8 @@ import {
   Package,
   Grid3X3,
   Tag,
+  ShoppingCart,
+  FileText,
 } from "lucide-react"
 
 import {
@@ -60,6 +62,23 @@ const data = {
               title: "Product Types",
               url: "/app/products/types",
               icon: Tag,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      groupLabel: "Orders",
+      items: [
+        {
+          title: "Orders Management",
+          url: "/app/orders",
+          icon: ShoppingCart,
+          items: [
+            {
+              title: "All Orders",
+              url: "/app/orders",
+              icon: FileText,
             },
           ],
         },

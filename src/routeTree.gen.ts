@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as PayRouteImport } from './routes/pay'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as CreateOrganizationRouteImport } from './routes/create-organization'
 import { Route as OfficeRouteRouteImport } from './routes/office/route'
@@ -18,6 +19,7 @@ import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OfficeIndexRouteImport } from './routes/office/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppOrdersRouteImport } from './routes/app/orders'
 import { Route as AppMembersRouteImport } from './routes/app/members'
 import { Route as AppInvitationsRouteImport } from './routes/app/invitations'
 import { Route as AppProductsIndexRouteImport } from './routes/app/products/index'
@@ -32,6 +34,11 @@ const VerifyEmailRoute = VerifyEmailRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PayRoute = PayRouteImport.update({
+  id: '/pay',
+  path: '/pay',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -69,6 +76,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppOrdersRoute = AppOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppMembersRoute = AppMembersRouteImport.update({
   id: '/members',
   path: '/members',
@@ -102,10 +114,12 @@ export interface FileRoutesByFullPath {
   '/office': typeof OfficeRouteRouteWithChildren
   '/create-organization': typeof CreateOrganizationRoute
   '/login': typeof LoginRoute
+  '/pay': typeof PayRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
   '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRoute
+  '/app/orders': typeof AppOrdersRoute
   '/app/': typeof AppIndexRoute
   '/office/': typeof OfficeIndexRoute
   '/app/products/types': typeof AppProductsTypesRoute
@@ -116,10 +130,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/create-organization': typeof CreateOrganizationRoute
   '/login': typeof LoginRoute
+  '/pay': typeof PayRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
   '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRoute
+  '/app/orders': typeof AppOrdersRoute
   '/app': typeof AppIndexRoute
   '/office': typeof OfficeIndexRoute
   '/app/products/types': typeof AppProductsTypesRoute
@@ -133,10 +149,12 @@ export interface FileRoutesById {
   '/office': typeof OfficeRouteRouteWithChildren
   '/create-organization': typeof CreateOrganizationRoute
   '/login': typeof LoginRoute
+  '/pay': typeof PayRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
   '/app/invitations': typeof AppInvitationsRoute
   '/app/members': typeof AppMembersRoute
+  '/app/orders': typeof AppOrdersRoute
   '/app/': typeof AppIndexRoute
   '/office/': typeof OfficeIndexRoute
   '/app/products/types': typeof AppProductsTypesRoute
@@ -151,10 +169,12 @@ export interface FileRouteTypes {
     | '/office'
     | '/create-organization'
     | '/login'
+    | '/pay'
     | '/signup'
     | '/verify-email'
     | '/app/invitations'
     | '/app/members'
+    | '/app/orders'
     | '/app/'
     | '/office/'
     | '/app/products/types'
@@ -165,10 +185,12 @@ export interface FileRouteTypes {
     | '/'
     | '/create-organization'
     | '/login'
+    | '/pay'
     | '/signup'
     | '/verify-email'
     | '/app/invitations'
     | '/app/members'
+    | '/app/orders'
     | '/app'
     | '/office'
     | '/app/products/types'
@@ -181,10 +203,12 @@ export interface FileRouteTypes {
     | '/office'
     | '/create-organization'
     | '/login'
+    | '/pay'
     | '/signup'
     | '/verify-email'
     | '/app/invitations'
     | '/app/members'
+    | '/app/orders'
     | '/app/'
     | '/office/'
     | '/app/products/types'
@@ -198,6 +222,7 @@ export interface RootRouteChildren {
   OfficeRouteRoute: typeof OfficeRouteRouteWithChildren
   CreateOrganizationRoute: typeof CreateOrganizationRoute
   LoginRoute: typeof LoginRoute
+  PayRoute: typeof PayRoute
   SignupRoute: typeof SignupRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
 }
@@ -216,6 +241,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pay': {
+      id: '/pay'
+      path: '/pay'
+      fullPath: '/pay'
+      preLoaderRoute: typeof PayRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -267,6 +299,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/orders': {
+      id: '/app/orders'
+      path: '/orders'
+      fullPath: '/app/orders'
+      preLoaderRoute: typeof AppOrdersRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/members': {
       id: '/app/members'
       path: '/members'
@@ -308,6 +347,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteRouteChildren {
   AppInvitationsRoute: typeof AppInvitationsRoute
   AppMembersRoute: typeof AppMembersRoute
+  AppOrdersRoute: typeof AppOrdersRoute
   AppIndexRoute: typeof AppIndexRoute
   AppProductsTypesRoute: typeof AppProductsTypesRoute
   AppProductsIndexRoute: typeof AppProductsIndexRoute
@@ -316,6 +356,7 @@ interface AppRouteRouteChildren {
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppInvitationsRoute: AppInvitationsRoute,
   AppMembersRoute: AppMembersRoute,
+  AppOrdersRoute: AppOrdersRoute,
   AppIndexRoute: AppIndexRoute,
   AppProductsTypesRoute: AppProductsTypesRoute,
   AppProductsIndexRoute: AppProductsIndexRoute,
@@ -345,6 +386,7 @@ const rootRouteChildren: RootRouteChildren = {
   OfficeRouteRoute: OfficeRouteRouteWithChildren,
   CreateOrganizationRoute: CreateOrganizationRoute,
   LoginRoute: LoginRoute,
+  PayRoute: PayRoute,
   SignupRoute: SignupRoute,
   VerifyEmailRoute: VerifyEmailRoute,
 }
