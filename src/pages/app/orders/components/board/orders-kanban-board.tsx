@@ -324,7 +324,7 @@ export function OrdersKanbanBoard({
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="w-full h-full flex flex-col">
       {/* Toolbar */}
       <OrdersToolbar
         filters={filters}

@@ -24,13 +24,15 @@ export function OrdersPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col">
-      <OrdersKanbanBoard
-        orders={orders}
-        isLoading={isLoading}
-        filters={filters}
-        onFiltersChange={setFilters}
-      />
+    <div className="h-full w-full p-2">
+      <div className="w-full h-full">
+        <OrdersKanbanBoard
+          orders={orders}
+          isLoading={isLoading}
+          filters={filters}
+          onFiltersChange={setFilters}
+        />
+      </div>
     </div>
   )
 }
