@@ -24,7 +24,7 @@ export function OrderDetailsDrawer({
   const macroStatus = getMacroStatus(order);
   const exceptionFlags = getExceptionFlags(order);
   const statusMeta = STATUS_META[macroStatus];
-  const nextAllowedStatuses = getNextAllowedStatuses(order.fulfillmentStatus, order.paymentStatus);
+  const nextAllowedStatuses = getNextAllowedStatuses(order.fulfillmentStatus);
 
   const totalFormatted = order.totalAmount ? new Intl.NumberFormat('en-US', {
     style: 'currency',

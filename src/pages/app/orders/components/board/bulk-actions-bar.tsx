@@ -3,7 +3,7 @@ import { Printer, Truck, Move, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { IOrder, STATUS_META } from "@/core/modules/types";
+import { IOrder } from "@/core/modules/types";
 
 interface BulkActionsBarProps {
   selectedCount: number;

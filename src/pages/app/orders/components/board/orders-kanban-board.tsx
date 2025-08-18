@@ -170,13 +170,6 @@ export function OrdersKanbanBoard({
     
     if (!order || !targetColumn) return;
 
-    // Check if transition is allowed
-    const isAllowed = isOrgAllowedTransition(
-      order.fulfillmentStatus,
-      getTargetFulfillmentStatus(targetColumn.macroStatus),
-      order.paymentStatus
-    );
-
     // Visual feedback could be added here
   };
 
@@ -197,7 +190,6 @@ export function OrdersKanbanBoard({
     const isAllowed = isOrgAllowedTransition(
       order.fulfillmentStatus,
       targetFulfillmentStatus,
-      order.paymentStatus
     );
 
     if (!isAllowed) {

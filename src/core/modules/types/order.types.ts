@@ -354,7 +354,6 @@ export function getExceptionFlags(order: IOrder.Model): IOrder.ExceptionFlags {
 export function isOrgAllowedTransition(
 	fromStatus: IOrder.OrderFulfillmentStatus,
 	toStatus: IOrder.OrderFulfillmentStatus,
-	paymentStatus: IOrder.OrderPaymentStatus
 ): boolean {
 	// Block system-only transitions
 	if (toStatus === IOrder.OrderFulfillmentStatus.DELIVERED) {
@@ -373,7 +372,6 @@ export function isOrgAllowedTransition(
 
 export function getNextAllowedStatuses(
 	currentStatus: IOrder.OrderFulfillmentStatus,
-	paymentStatus: IOrder.OrderPaymentStatus
 ): IOrder.OrderFulfillmentStatus[] {
 	return STATUS_TRANSITIONS[currentStatus] || [];
 }
