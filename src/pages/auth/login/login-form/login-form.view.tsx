@@ -1,10 +1,6 @@
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import z from "zod"
-import { passwordSchema } from "@/core/modules/shared/value-objects/password"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Form,
 	FormControl,
@@ -12,37 +8,16 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/ui/form";
+} from "@/components/ui/form"
 import { MrPasswordInput } from "@/components/mr-password-input"
-import { useLogin } from "@/core/modules/user/infra/hooks"
+import { useLoginFormViewModel } from "./login-form.viewmodel"
 
-const formSchema = z.object({
-  email: z.string().email(),
-  password: passwordSchema,
-})
-
-type FormValues = z.infer<typeof formSchema>
-
-export const LoginForm = () => {
-  const { mutate: login, isPending } = useLogin()
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  })
-
-  function onSubmit(values: FormValues) {
-    login({
-      email: values.email,
-      password: values.password,
-    })
-  }
+export const LoginFormView = () => {
+  const { form, isPending, handleSubmit } = useLoginFormViewModel()
 
   return (
     <Form {...form}>
-      <form className={cn("flex flex-col gap-6")} onSubmit={form.handleSubmit(onSubmit)}>
+      <form className={cn("flex flex-col gap-6")} onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="grid gap-6">
           <div className="grid gap-3">
           <FormField

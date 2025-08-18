@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { PublicRoute } from '@/components/auth/public-route'
-import { LoginPage } from '@/pages/auth'
+import { LoginPage } from '@/pages/auth/login'
 
 export const Route = createFileRoute('/login')({
   validateSearch: (search: Record<string, unknown>) => {
