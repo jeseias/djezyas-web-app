@@ -1,21 +1,17 @@
 import { useState } from "react"
-import { OrdersPageHeader } from "./components/orders-page-header"
-import { OrdersTable } from "./components/orders-table"
-import { OrdersFilters } from "./components/orders-filters"
-import { OrderDetailDrawer } from "./components/order-detail-drawer"
-import { useOrders } from "./hooks/use-orders"
+import { OrdersKanbanBoard } from "./components/board"
+import { useApiLoadOrdersByOrganization } from "@/core/modules/api"
 
 export function OrdersPage() {
-  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
-  const [showFilters, setShowFilters] = useState(false)
-  
-  const { data, isLoading, error } = useOrders({
-    page: 1,
-    limit: 10,
+  const [filters, setFilters] = useState({
+    search: "",
+    fulfillmentStatus: [],
+    sortBy: "createdAt",
   })
-  
-  const orders = data?.items || []
-  const totalCount = data?.totalCount || 0
+
+  const { data, isLoading, error } = useApiLoadOrdersByOrganization({})
+
+  const orders = data?.orders || []
 
   if (error) {
     return (
@@ -28,27 +24,12 @@ export function OrdersPage() {
   }
 
   return (
-    <div className="space-y-6 px-6">
-      <OrdersPageHeader 
-        orderCount={totalCount}
-        onToggleFilters={() => setShowFilters(!showFilters)}
-        showFilters={showFilters}
-      />
-      
-      {showFilters && (
-        <OrdersFilters />
-      )}
-      
-      <OrdersTable 
-        orders={orders} 
+    <div className="h-screen flex flex-col">
+      <OrdersKanbanBoard
+        orders={orders}
         isLoading={isLoading}
-        onOrderClick={(orderId) => setSelectedOrderId(orderId)}
-      />
-      
-      <OrderDetailDrawer
-        orderId={selectedOrderId}
-        open={!!selectedOrderId}
-        onOpenChange={(open) => !open && setSelectedOrderId(null)}
+        filters={filters}
+        onFiltersChange={setFilters}
       />
     </div>
   )
