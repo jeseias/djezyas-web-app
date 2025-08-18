@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { IOrder, STATUS_META, getMacroStatus, isOrgAllowedTransition } from "@/core/modules/types";
 import { OrdersToolbar } from "./orders-toolbar";
 import { KanbanColumn } from "./kanban-column";
-import { OrderCard } from "./order-card";
+import { OrderCard } from "./order-card/order-card";
 import { OrderDetailsDrawer } from "./order-details-drawer";
 import { BulkActionsBar } from "./bulk-actions-bar";
 import { OrdersScrollContainer } from "./orders-scroll-container";
@@ -325,7 +325,6 @@ export function OrdersKanbanBoard({
 
   return (
     <div className="w-full h-full flex flex-col">
-      {/* Toolbar */}
       <OrdersToolbar
         filters={filters}
         onFiltersChange={onFiltersChange}

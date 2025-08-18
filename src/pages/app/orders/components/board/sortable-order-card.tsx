@@ -1,7 +1,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { IOrder } from "@/core/modules/types";
-import { OrderCard } from "./order-card";
+import { OrderCard } from "./order-card/order-card";
 
 interface SortableOrderCardProps {
   order: IOrder.Model;

@@ -44,11 +44,11 @@ export function OrdersToolbar({
 
   return (
     <div className="sticky top-0 z-20 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
-      <div className="flex items-center justify-between p-4 gap-4">
-        {/* Left side - Search and Filters */}
-        <div className="flex items-center gap-4 flex-1">
+      <div className="p-4 space-y-4">
+        {/* Top row - Search and Filters */}
+        <div className="flex items-center gap-3 flex-wrap">
           {/* Search */}
-          <div className="relative flex-1 max-w-md">
+          <div className="relative flex-1 min-w-[200px] max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder="Search orders..."
@@ -59,69 +59,77 @@ export function OrdersToolbar({
           </div>
 
           {/* Filters Button */}
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="shrink-0">
             <Filter className="h-4 w-4 mr-2" />
             Filters
           </Button>
 
           {/* Needs Attention Badge */}
           {selectedCount > 0 && (
-            <Badge variant="destructive" className="animate-pulse">
+            <Badge variant="destructive" className="animate-pulse shrink-0">
               {selectedCount} needs attention
             </Badge>
           )}
         </div>
 
-        {/* Center - Board Mode Toggle */}
-        <div className="flex items-center gap-4">
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="board-mode"
-              checked={boardMode === IOrder.BoardMode.ALL_STAGES}
-              onCheckedChange={(checked) =>
-                onBoardModeChange(
-                  checked ? IOrder.BoardMode.ALL_STAGES : IOrder.BoardMode.IMPORTANT
-                )
-              }
-            />
-            <Label htmlFor="board-mode" className="text-sm font-medium">
-              Show all stages
-            </Label>
+        {/* Bottom row - Controls and Info */}
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          {/* Left - Board Controls */}
+          <div className="flex items-center gap-4 flex-wrap">
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="board-mode"
+                checked={boardMode === IOrder.BoardMode.ALL_STAGES}
+                onCheckedChange={(checked) =>
+                  onBoardModeChange(
+                    checked ? IOrder.BoardMode.ALL_STAGES : IOrder.BoardMode.IMPORTANT
+                  )
+                }
+              />
+              <Label htmlFor="board-mode" className="text-sm font-medium whitespace-nowrap">
+                Show all stages
+              </Label>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="show-all-stages"
+                checked={showAllStages}
+                onCheckedChange={onShowAllStagesChange}
+              />
+              <Label htmlFor="show-all-stages" className="text-sm font-medium whitespace-nowrap">
+                Show exceptions
+              </Label>
+            </div>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="show-all-stages"
-              checked={showAllStages}
-              onCheckedChange={onShowAllStagesChange}
-            />
-            <Label htmlFor="show-all-stages" className="text-sm font-medium">
-              Show exceptions
-            </Label>
+          {/* Right - Selection and Count */}
+          <div className="flex items-center gap-3 flex-wrap">
+            {/* Select All */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleSelectAll}
+              className="flex items-center gap-2 shrink-0"
+            >
+              {selectedCount === totalCount ? (
+                <CheckSquare className="h-4 w-4" />
+              ) : (
+                <Square className="h-4 w-4" />
+              )}
+              <span className="hidden sm:inline">
+                {selectedCount > 0 ? `${selectedCount} selected` : "Select all"}
+              </span>
+              <span className="sm:hidden">
+                {selectedCount > 0 ? `${selectedCount}` : "All"}
+              </span>
+            </Button>
+
+            {/* Total Count */}
+            <Badge variant="secondary" className="text-xs shrink-0">
+              {totalCount} orders
+            </Badge>
           </div>
-        </div>
-
-        {/* Right side - Selection and Count */}
-        <div className="flex items-center gap-4">
-          {/* Select All */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleSelectAll}
-            className="flex items-center gap-2"
-          >
-            {selectedCount === totalCount ? (
-              <CheckSquare className="h-4 w-4" />
-            ) : (
-              <Square className="h-4 w-4" />
-            )}
-            {selectedCount > 0 ? `${selectedCount} selected` : "Select all"}
-          </Button>
-
-          {/* Total Count */}
-          <Badge variant="secondary" className="text-xs">
-            {totalCount} orders
-          </Badge>
         </div>
       </div>
     </div>
