@@ -25,6 +25,7 @@ import { Route as AppInvitationsRouteImport } from './routes/app/invitations'
 import { Route as AppProductsIndexRouteImport } from './routes/app/products/index'
 import { Route as OfficeProductsCategoriesRouteImport } from './routes/office/products/categories'
 import { Route as AppProductsTypesRouteImport } from './routes/app/products/types'
+import { Route as AppOrganizationSettingsRouteImport } from './routes/app.organization.settings'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -107,6 +108,11 @@ const AppProductsTypesRoute = AppProductsTypesRouteImport.update({
   path: '/products/types',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppOrganizationSettingsRoute = AppOrganizationSettingsRouteImport.update({
+  id: '/organization/settings',
+  path: '/organization/settings',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/app/orders': typeof AppOrdersRoute
   '/app/': typeof AppIndexRoute
   '/office/': typeof OfficeIndexRoute
+  '/app/organization/settings': typeof AppOrganizationSettingsRoute
   '/app/products/types': typeof AppProductsTypesRoute
   '/office/products/categories': typeof OfficeProductsCategoriesRoute
   '/app/products': typeof AppProductsIndexRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/app/orders': typeof AppOrdersRoute
   '/app': typeof AppIndexRoute
   '/office': typeof OfficeIndexRoute
+  '/app/organization/settings': typeof AppOrganizationSettingsRoute
   '/app/products/types': typeof AppProductsTypesRoute
   '/office/products/categories': typeof OfficeProductsCategoriesRoute
   '/app/products': typeof AppProductsIndexRoute
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/app/orders': typeof AppOrdersRoute
   '/app/': typeof AppIndexRoute
   '/office/': typeof OfficeIndexRoute
+  '/app/organization/settings': typeof AppOrganizationSettingsRoute
   '/app/products/types': typeof AppProductsTypesRoute
   '/office/products/categories': typeof OfficeProductsCategoriesRoute
   '/app/products/': typeof AppProductsIndexRoute
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/app/orders'
     | '/app/'
     | '/office/'
+    | '/app/organization/settings'
     | '/app/products/types'
     | '/office/products/categories'
     | '/app/products'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/app/orders'
     | '/app'
     | '/office'
+    | '/app/organization/settings'
     | '/app/products/types'
     | '/office/products/categories'
     | '/app/products'
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '/app/orders'
     | '/app/'
     | '/office/'
+    | '/app/organization/settings'
     | '/app/products/types'
     | '/office/products/categories'
     | '/app/products/'
@@ -341,6 +353,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProductsTypesRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/organization/settings': {
+      id: '/app/organization/settings'
+      path: '/organization/settings'
+      fullPath: '/app/organization/settings'
+      preLoaderRoute: typeof AppOrganizationSettingsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
   }
 }
 
@@ -349,6 +368,7 @@ interface AppRouteRouteChildren {
   AppMembersRoute: typeof AppMembersRoute
   AppOrdersRoute: typeof AppOrdersRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppOrganizationSettingsRoute: typeof AppOrganizationSettingsRoute
   AppProductsTypesRoute: typeof AppProductsTypesRoute
   AppProductsIndexRoute: typeof AppProductsIndexRoute
 }
@@ -358,6 +378,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppMembersRoute: AppMembersRoute,
   AppOrdersRoute: AppOrdersRoute,
   AppIndexRoute: AppIndexRoute,
+  AppOrganizationSettingsRoute: AppOrganizationSettingsRoute,
   AppProductsTypesRoute: AppProductsTypesRoute,
   AppProductsIndexRoute: AppProductsIndexRoute,
 }

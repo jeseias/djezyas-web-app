@@ -8,6 +8,7 @@ import {
   Tag,
   ShoppingCart,
   FileText,
+  Settings,
 } from "lucide-react"
 
 import {
@@ -23,28 +24,6 @@ import { OrganizationSwitcher } from "./organization-switcher"
 
 const data = {
   navMain: [
-    {
-      groupLabel: "Organization",
-      items: [
-        {
-          title: "Overview",
-          url: "/app",
-          icon: SquareTerminal,
-          items: [
-            {
-              title: "Members",
-              url: "/app/members",
-              icon: Users,
-            },
-            {
-              title: "Invitations",
-              url: "/app/invitations",
-              icon: Mail,
-            },
-          ],
-        },
-      ],
-    },
     {
       groupLabel: "Merchandise",
       items: [
@@ -79,6 +58,33 @@ const data = {
               title: "All Orders",
               url: "/app/orders",
               icon: FileText,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      groupLabel: "Organization",
+      items: [
+        {
+          title: "Overview",
+          url: "/app",
+          icon: SquareTerminal,
+          items: [
+            {
+              title: "Members",
+              url: "/app/members",
+              icon: Users,
+            },
+            {
+              title: "Invitations",
+              url: "/app/invitations",
+              icon: Mail,
+            },
+            {
+              title: "Settings",
+              url: "/app/organization/settings",
+              icon: Settings,
             },
           ],
         },
