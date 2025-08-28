@@ -172,14 +172,18 @@ export const PayPage = () => {
                 </div>
               ) : (
                 <div className="flex justify-center">
-                  <iframe
-                    ref={iframeRef}
-                    src={iframeUrl}
-                    width={562}
-                    height={816}
-                    className="border-0 rounded-lg"
-                    onError={handleIframeError}
-                  />
+                  <div className="w-full max-w-[562px] h-[calc(100vh-200px)] min-h-[600px] max-h-[800px] overflow-hidden rounded-lg border border-gray-200">
+                    <iframe
+                      ref={iframeRef}
+                      src={iframeUrl}
+                      className="w-full h-full border-0 rounded-lg"
+                      onError={handleIframeError}
+                      style={{
+                        minHeight: '600px',
+                        maxHeight: '800px'
+                      }}
+                    />
+                  </div>
                 </div>
               )}
             </div>
