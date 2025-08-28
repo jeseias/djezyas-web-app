@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearch } from "@tanstack/react-router";
 import { useApiGetCheckoutSession } from "@/core/modules/api";
-import { OrderSummary } from "./components/OrderSummary";
+// import { OrderSummary } from "./components/OrderSummary";
 import { PaymentResultCard } from "./components/PaymentResultCard";
 import { isTrustedProviderEvent, mapEmisStatusToPaymentStatus, formatExpiryTime } from "@/core/modules/shared/utils/payment-utils";
 import type { IPayment } from "@/core/modules/types";
@@ -21,7 +21,7 @@ export const PayPage = () => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   
   const [terminal, setTerminal] = useState<IPayment.PaymentTerminal | null>(null);
-  const [timeRemaining, setTimeRemaining] = useState<string>("");
+  const [_timeRemaining, setTimeRemaining] = useState<string>("");
   const [iframeError, setIframeError] = useState(false);
 
   const { data: session, isLoading, error } = useApiGetCheckoutSession(token || "");
@@ -142,54 +142,27 @@ export const PayPage = () => {
   const iframeUrl = `https://pagamentonline.emis.co.ao/online-payment-gateway/portal/frame?token=${session.transactionId}`;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Order Summary */}
-          <div className="lg:order-1">
-            <OrderSummary
-              orders={session.orders}
-              totalAmount={session.totalAmount}
-              expiresAt={session.expiresAt}
-              timeRemaining={timeRemaining}
-            />
-          </div>
-
-          {/* Payment Iframe */}
-          <div className="lg:order-2">
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Payment</h2>
-              
-              {iframeError ? (
-                <div className="text-center py-8">
-                  <p className="text-gray-600 mb-4">Failed to load payment form</p>
-                  <button
-                    onClick={handleRetry}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-                  >
-                    Retry
-                  </button>
-                </div>
-              ) : (
-                <div className="flex justify-center">
-                  <div className="w-full max-w-[562px] h-[calc(100vh-200px)] min-h-[600px] max-h-[800px] overflow-hidden rounded-lg border border-gray-200">
-                    <iframe
-                      ref={iframeRef}
-                      src={iframeUrl}
-                      className="w-full h-full border-0 rounded-lg"
-                      onError={handleIframeError}
-                      style={{
-                        minHeight: '600px',
-                        maxHeight: '800px'
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
+    <div className="min-h-screen bg-white">
+      {iframeError ? (
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="text-center">
+            <p className="text-gray-600 mb-4">Failed to load payment form</p>
+            <button
+              onClick={handleRetry}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Retry
+            </button>
           </div>
         </div>
-      </div>
+      ) : (
+        <iframe
+          ref={iframeRef}
+          src={iframeUrl}
+          className="w-full h-screen border-0"
+          onError={handleIframeError}
+        />
+      )}
     </div>
   );
 };
