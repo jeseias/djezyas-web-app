@@ -42,16 +42,16 @@ interface OrganizationData {
   phone?: string;
 }
 
-const MAX_FILE_SIZE_MB = 6;
-const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024;
-const MAX_RESOLUTION = 1080;
+// const MAX_FILE_SIZE_MB = 6;
+// const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024;
+// const MAX_RESOLUTION = 1080;
 
 export function OrganizationSettingsPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   
   // Mock data - replace with actual data from your API
-  const [organizationData, setOrganizationData] = useState<OrganizationData>({
+  const [organizationData, _setOrganizationData] = useState<OrganizationData>({
     name: "Acme Corporation",
     description: "A leading technology company specializing in innovative solutions.",
     imageUrl: "",
@@ -144,9 +144,9 @@ export function OrganizationSettingsPage() {
       let imageUrl = organizationData.imageUrl;
       if (croppedImage) {
         // Convert base64 to file and upload
-        const response = await fetch(croppedImage);
-        const blob = await response.blob();
-        const file = new File([blob], "organization-logo.png", { type: "image/png" });
+        // const response = await fetch(croppedImage);
+        // const blob = await response.blob();
+        // const file = new File([blob], "organization-logo.png", { type: "image/png" });
         
         // TODO: Implement actual file upload
         // imageUrl = await uploadFile(file);
