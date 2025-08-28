@@ -142,7 +142,14 @@ export const PayPage = () => {
   const iframeUrl = `https://pagamentonline.emis.co.ao/online-payment-gateway/portal/frame?token=${session.transactionId}`;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div 
+      className="min-h-screen bg-gray-50 relative overflow-y-auto"
+      style={{
+        height: '100vh',
+        overflowY: 'auto',
+        overflowX: 'hidden'
+      }}
+    >
       {iframeError ? (
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="text-center">
@@ -156,12 +163,60 @@ export const PayPage = () => {
           </div>
         </div>
       ) : (
-        <iframe
-          ref={iframeRef}
-          src={iframeUrl}
-          className="w-full h-screen border-0"
-          onError={handleIframeError}
-        />
+        <div className="max-w-md mx-auto bg-white">
+          {/* Order Summary Section */}
+          <div className="p-4 border-b border-gray-100">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-lg font-semibold text-gray-900">Order Summary</h2>
+              {_timeRemaining && (
+                <span className="text-sm text-gray-500">
+                  Expires in: <span className="font-mono font-semibold">{_timeRemaining}</span>
+                </span>
+              )}
+            </div>
+            
+            {session.orders.flatMap(order => order.items).map((item, index) => (
+              <div key={`${item.productId}-${index}`} className="flex items-center justify-between py-2">
+                <div className="flex items-center flex-1 min-w-0">
+                  <div className="w-8 h-8 bg-gray-200 rounded mr-3 flex items-center justify-center">
+                    <span className="text-xs text-gray-600">📦</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-medium text-gray-900 truncate">
+                      {item.product.name}
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      Qty: {item.quantity} × {item.unitAmount} Kz
+                    </p>
+                  </div>
+                </div>
+                <div className="text-sm font-semibold text-gray-900 ml-2">
+                  {item.subtotal} Kz
+                </div>
+              </div>
+            ))}
+            
+            <div className="flex justify-between items-center pt-3 border-t border-gray-100 mt-3">
+              <span className="text-base font-semibold text-gray-900">Total</span>
+              <span className="text-lg font-bold text-gray-900">
+                {session.totalAmount} Kz
+              </span>
+            </div>
+          </div>
+
+          {/* Payment Section */}
+          <div className="p-4">
+            <h2 className="text-lg font-semibold text-gray-900 mb-3">Payment</h2>
+            <div className="bg-gray-50 rounded-lg overflow-hidden">
+              <iframe
+                ref={iframeRef}
+                src={iframeUrl}
+                className="w-full min-h-[95vh] border-0"
+                onError={handleIframeError}
+              />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
