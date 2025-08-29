@@ -43,7 +43,6 @@ const GET_ORDERS_BY_ORGANIZATION_QUERY = `#graphql
         fulfillmentStatus
         clientConfirmedIsDelivered
         paymentIntentId
-        transactionId
         paidAt
         inDeliveryAt
         clientConfirmedDeliveryAt
@@ -92,7 +91,6 @@ const GET_ORDERS_BY_ORGANIZATION_QUERY = `#graphql
           fulfillmentStatus
           clientConfirmedIsDelivered
           paymentIntentId
-          transactionId
           paidAt
           inDeliveryAt
           clientConfirmedDeliveryAt
