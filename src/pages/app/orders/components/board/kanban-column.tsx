@@ -33,7 +33,7 @@ export function KanbanColumn({
   return (
     <div
       ref={setNodeRef}
-      className="shrink-0 w-[360px] snap-start bg-card rounded-none border-2 border-border shadow-lg hover:shadow-xl transition-shadow duration-200 flex flex-col h-full"
+      className="shrink-0 w-[240px] sm:w-[280px] md:w-[320px] lg:w-[360px] snap-start bg-card rounded-none border-2 border-border shadow-lg hover:shadow-xl transition-shadow duration-200 flex flex-col h-full"
       style={droppableStyle}
     >
       {/* Column Header */}

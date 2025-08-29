@@ -44,11 +44,11 @@ export function OrdersToolbar({
 
   return (
     <div className="sticky top-0 z-20 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
-      <div className="p-4 space-y-4">
+      <div className="p-2 sm:p-4 space-y-3 sm:space-y-4">
         {/* Top row - Search and Filters */}
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           {/* Search */}
-          <div className="relative flex-1 min-w-[200px] max-w-md">
+          <div className="relative flex-1 min-w-[150px] sm:min-w-[200px] max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder="Search orders..."
@@ -73,9 +73,9 @@ export function OrdersToolbar({
         </div>
 
         {/* Bottom row - Controls and Info */}
-        <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap">
           {/* Left - Board Controls */}
-          <div className="flex items-center gap-4 flex-wrap">
+          <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
             <div className="flex items-center space-x-2">
               <Switch
                 id="board-mode"
@@ -104,7 +104,7 @@ export function OrdersToolbar({
           </div>
 
           {/* Right - Selection and Count */}
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             {/* Select All */}
             <Button
               variant="ghost"

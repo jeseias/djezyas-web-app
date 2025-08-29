@@ -24,15 +24,13 @@ export function OrdersPage() {
   }
 
   return (
-    <div className="h-full w-full p-2">
-      <div className="w-full h-full">
-        <OrdersKanbanBoard
-          orders={orders}
-          isLoading={isLoading}
-          filters={filters}
-          onFiltersChange={setFilters}
-        />
-      </div>
+    <div className="h-full w-[81%] px-4">
+      <OrdersKanbanBoard
+        orders={orders}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={setFilters}
+      />
     </div>
   )
 }

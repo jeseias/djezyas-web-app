@@ -45,7 +45,7 @@ export const AppWrapperLayout = ({ children }: PropsWithChildren) => {
             </Link>
           )}
         </header>
-        <main className="flex-1 bg-gradient-to-br from-background via-background to-muted/20 overflow-hidden overflow-y-scroll">
+        <main className="w-full h-full bg-gradient-to-br from-background via-background to-muted/20 overflow-scroll">
           {children}
         </main>
       </SidebarInset>

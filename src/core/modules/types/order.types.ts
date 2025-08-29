@@ -4,6 +4,7 @@ export namespace IOrder {
 		PAID = "paid",
 		REFUNDED = "refunded",
 		FAILED = "failed",
+    AWAITING_PAYMENT = "awaiting_payment",
 	}
 
 	export enum OrderFulfillmentStatus {
@@ -298,8 +299,13 @@ export const STATUS_TRANSITIONS: Record<IOrder.OrderFulfillmentStatus, IOrder.Or
 export function getMacroStatus(order: IOrder.Model): IOrder.MacroStatus {
 	const { paymentStatus, fulfillmentStatus } = order;
 
-	// Virtual status: Awaiting Payment
+	// New stage: fulfillmentStatus = "new" AND paymentStatus = "pending"
 	if (paymentStatus === IOrder.OrderPaymentStatus.PENDING && fulfillmentStatus === IOrder.OrderFulfillmentStatus.NEW) {
+		return IOrder.MacroStatus.NEW;
+	}
+
+	// Awaiting Payment stage: fulfillmentStatus = "new" AND paymentStatus = "awaiting_payment"
+	if (paymentStatus === IOrder.OrderPaymentStatus.AWAITING_PAYMENT && fulfillmentStatus === IOrder.OrderFulfillmentStatus.NEW) {
 		return IOrder.MacroStatus.AWAITING_PAYMENT;
 	}
 

@@ -163,6 +163,7 @@ export const useApiLoadOrdersByOrganization = (params: Omit<GetOrdersByOrganizat
       organizationId: organization?.id ?? "", 
       userId: user?.id ?? "" 
     }),
+    refetchInterval: 1000 * 60 * .30, // 30 seconds
 		enabled: !!organization?.id && !!user?.id,
 	});
 };

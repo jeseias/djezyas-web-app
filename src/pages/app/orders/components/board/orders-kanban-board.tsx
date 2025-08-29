@@ -347,7 +347,7 @@ export function OrdersKanbanBoard({
         onDragEnd={handleDragEnd}
       >
         <OrdersScrollContainer className="flex-1">
-          <div className="flex flex-nowrap gap-4 px-4 py-3 h-full">
+          <div className="flex flex-nowrap gap-1 sm:gap-2 md:gap-4 px-1 sm:px-2 md:px-4 py-3 h-full">
             {columns.map((column) => (
               <KanbanColumn
                 key={column.id}
