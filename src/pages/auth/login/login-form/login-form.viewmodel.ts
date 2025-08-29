@@ -4,7 +4,7 @@ import z from "zod"
 import { passwordSchema } from "@/core/modules/shared/value-objects/password"
 import { useLogin } from "@/core/modules/user/infra/hooks"
 import { useRouter } from "@tanstack/react-router"
-import { useApiLoadMyOrganizations } from "@/core/modules/organization/infra/hooks"
+import { useApiLoadMyOrganizationMutation, useApiLoadMyOrganizations } from "@/core/modules/organization/infra/hooks"
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -16,7 +16,11 @@ export type LoginFormValues = z.infer<typeof formSchema>
 export const useLoginFormViewModel = () => {
   const router = useRouter()
   const { mutate: login, isPending } = useLogin()
-  const { refetch: refetchOrganizations } = useApiLoadMyOrganizations()
+  const { mutate: loadMyOrganization } = useApiLoadMyOrganizationMutation({
+    cb: () => {
+      router.navigate({ to: "/app" })
+    }
+  })
   
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(formSchema),
@@ -32,8 +36,7 @@ export const useLoginFormViewModel = () => {
       password: values.password,
     }, {
       onSuccess() {
-        refetchOrganizations()
-        router.navigate({ to: "/app" })
+        loadMyOrganization()
       }
     })
   }

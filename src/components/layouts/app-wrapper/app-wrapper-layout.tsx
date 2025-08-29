@@ -10,7 +10,7 @@ export const AppWrapperLayout = ({ children }: PropsWithChildren) => {
   const { isAdmin } = useAuth()
   
   return (
-    <SidebarProvider>
+    <SidebarProvider className="overflow-hidden">
       <AppSidebar />
       <SidebarInset className="relative h-screen flex flex-col">
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

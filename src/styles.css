@@ -123,8 +123,28 @@
   
   html, body {
     @apply bg-background text-foreground;
-    height: 100vh;
-    width: 100vw;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--muted);
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+      background: var(--muted);
+      border-radius: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 8px;
+      min-height: 24px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-foreground);
+    }
+    &::-webkit-scrollbar-track {
+      background: var(--muted);
+      border-radius: 8px;
+    }
   }
   
   body {
